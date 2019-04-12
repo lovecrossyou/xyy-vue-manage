@@ -70,7 +70,7 @@
 					</el-form-item>
 					<el-form-item label="食品规格">
 						<el-radio class="radio" v-model="foodSpecs" label="one">单规格</el-radio>
-  						<el-radio class="radio" v-model="foodSpecs" label="more">多规格</el-radio>
+  						<!-- <el-radio class="radio" v-model="foodSpecs" label="more">多规格</el-radio> -->
 					</el-form-item>
 					<el-row v-if="foodSpecs == 'one'">
 						<el-form-item label="包装费">
