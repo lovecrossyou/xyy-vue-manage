@@ -34,8 +34,12 @@
 			      prop="id">
 			    </el-table-column>
 			    <el-table-column
-			      label="总价格"
+			      label="总价格(元)"
 			      prop="total_amount">
+			    </el-table-column>
+                <el-table-column
+			      label="下单时间"
+			      prop="formatted_created_at">
 			    </el-table-column>
 			    <el-table-column
 			      label="订单状态"
@@ -116,6 +120,7 @@
  					tableData.restaurant_id = item.restaurant_id;
  					tableData.address_id = item.address_id;
                     tableData.index = index;
+                    tableData.formatted_created_at = item.formatted_created_at;
                     this.tableData.push(tableData);
                 })
             },

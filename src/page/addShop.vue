@@ -33,7 +33,7 @@
 						  change-on-select
 						></el-cascader>
 					</el-form-item>
-					<el-form-item label="店铺特点" style="white-space: nowrap;">
+					<!-- <el-form-item label="店铺特点" style="white-space: nowrap;">
 						<span>品牌保证</span>
 						<el-switch on-text="" off-text="" v-model="formData.is_premium"></el-switch>
 						<span>蜂鸟专送</span>
@@ -48,7 +48,7 @@
 						<el-switch on-text="" off-text="" v-model="formData.zhun"></el-switch>
 						<span>开发票</span>
 						<el-switch on-text="" off-text="" v-model="formData.piao"></el-switch>
-					</el-form-item>
+					</el-form-item> -->
 					<el-form-item label="配送费" prop="float_delivery_fee">
 						<el-input-number v-model="formData.float_delivery_fee" :min="0" :max="20"></el-input-number>
 					</el-form-item>
@@ -178,8 +178,8 @@
 					description: '', //介绍
 					phone: '',
 					promotion_info: '',
-					float_delivery_fee: 5, //运费
-					float_minimum_order_amount: 20, //起价
+					float_delivery_fee: 0, //运费
+					float_minimum_order_amount: 0, //起价
 					is_premium: true,
 					delivery_mode: true,
 					new: true,
@@ -402,8 +402,8 @@
 									description: '', //介绍
 									phone: '',
 									promotion_info: '',
-									float_delivery_fee: 5, //运费
-									float_minimum_order_amount: 20, //起价
+									float_delivery_fee: 0, //运费
+									float_minimum_order_amount: 0, //起价
 									is_premium: true,
 									delivery_mode: true,
 									new: true,
