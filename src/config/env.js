@@ -14,7 +14,7 @@ if (process.env.NODE_ENV == 'development') {
 	baseUrl = '';
     baseImgPath = '';
 }else{
-	baseUrl = '//47.94.169.143:8004';
+	baseUrl = '//api.kuaimayoupin.com';
     baseImgPath = '';
 }
 
