@@ -401,14 +401,6 @@ export default {
             }
           );
           try {
-            if (this.formData.phone.length != 11) {
-              this.$notify.error({
-                title: "错误",
-                message: "请检查手机号是否合法",
-                offset: 100
-              });
-              return;
-            }
             let result = await addShop(this.formData);
             if (result.status == 1) {
               this.$message({
