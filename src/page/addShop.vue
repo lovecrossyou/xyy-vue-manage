@@ -401,7 +401,7 @@ export default {
             }
           );
           try {
-            if (this.formData.phone.length != 11) {
+            if (this.formData.phone.length===0) {
               this.$notify.error({
                 title: "错误",
                 message: "请检查手机号是否合法",
