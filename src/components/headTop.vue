@@ -15,7 +15,7 @@
 </template>
 
 <script>
-	import {signout} from '@/api/getData'
+	import {singout} from '@/api/getData'
 	import {baseImgPath} from '@/config/env'
 	import {mapActions, mapState} from 'vuex'
 
@@ -39,7 +39,7 @@
 				if (command == 'home') {
 					this.$router.push('/manage');
 				}else if(command == 'signout'){
-					const res = await signout()
+					const res = await singout()
 					if (res.status == 1) {
 						this.$message({
 	                        type: 'success',
