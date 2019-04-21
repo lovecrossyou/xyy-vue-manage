@@ -34,6 +34,7 @@
 				loginForm: {
 					username: '',
 					password: '',
+					status:'2'
 				},
 				rules: {
 					username: [
