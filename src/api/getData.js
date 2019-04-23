@@ -236,7 +236,9 @@ export const getUserCity = () => fetch('/v1/user/city/count');
 
 //轮播管理 , 
 export const getBannerList = () => fetch('/banner/list');
-export const delBanner = () => fetch('/banner/delBanner');
+export const addBanner = data => fetch('/banner/create',data,'POST');
+
+export const delBanner = banner_id => fetch('/banner/'+banner_id,{},'DELETE');
 
 // 添加厂家
 export const addFactory = data => fetch('/factory/addfactory',data, 'POST');
