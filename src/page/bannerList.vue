@@ -12,7 +12,7 @@
             <img class="showimg" width="40" height="40" :src="scope.row.image">
           </template>
         </el-table-column>
-        <el-table-column property="url" label="url"></el-table-column>
+        <el-table-column property="url" label="链接"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
