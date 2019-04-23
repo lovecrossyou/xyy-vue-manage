@@ -80,12 +80,6 @@ export default {
     async handleDelete(index, row) {},
     async initData() {
       try {
-        const countData = await getUserCount();
-        if (countData.status == 1) {
-          this.count = countData.count;
-        } else {
-          throw new Error("获取数据失败");
-        }
         this.getBannerList();
       } catch (err) {
         console.log("获取数据失败", err);
@@ -100,18 +94,11 @@ export default {
       this.getBannerList();
     },
     async getBannerList() {
-      const Users = await getBannerList({
+      const res = await getBannerList({
         offset: this.offset,
         limit: this.limit
       });
-      this.tableData = [];
-      Users.forEach(item => {
-        const tableData = {};
-        tableData.username = item.username;
-        tableData.registe_time = item.registe_time;
-        tableData.city = item.city;
-        this.tableData.push(tableData);
-      });
+      this.tableData = res.data;
     }
   }
 };
