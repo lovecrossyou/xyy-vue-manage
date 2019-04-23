@@ -86,7 +86,7 @@ export default {
         } else {
           throw new Error("获取数据失败");
         }
-        this.getUsers();
+        this.getBannerList();
       } catch (err) {
         console.log("获取数据失败", err);
       }
@@ -97,10 +97,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.offset = (val - 1) * this.limit;
-      this.getUsers();
+      this.getBannerList();
     },
-    async getUsers() {
-      const Users = await getUserList({
+    async getBannerList() {
+      const Users = await getBannerList({
         offset: this.offset,
         limit: this.limit
       });

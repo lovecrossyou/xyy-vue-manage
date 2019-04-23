@@ -30,6 +30,7 @@ module.exports = {
     proxyTable: {},
     context: [ //代理路径
         '/shopping',
+        '/factory',
         '/ugc',
         '/v1',
         '/v2',

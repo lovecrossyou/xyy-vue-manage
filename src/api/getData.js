@@ -238,4 +238,17 @@ export const getUserCity = () => fetch('/v1/user/city/count');
 export const getBannerList = () => fetch('/banner/list');
 export const delBanner = () => fetch('/banner/delBanner');
 
+// 添加厂家
+export const addFactory = data => fetch('/factory/addfactory',data, 'POST');
+
+// 厂家列表
+export const getFactoryList = () => fetch('/factory/list');
+
+// 更新厂家
+export const updateFactory = data => fetch('/factory/updatefactory',data, 'POST');
+
+// count
+export const getFactoryCount = () => fetch('/factory/count');
+
+
 

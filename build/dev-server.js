@@ -53,7 +53,7 @@ compiler.plugin('compilation', function (compilation) {
 var context = config.dev.context
 
 switch(process.env.NODE_ENV){
-    case 'local': var proxypath = 'http://localhost:8004'; break;
+    case 'local': var proxypath = 'http://0.0.0.0:8004'; break;
     case 'online': var proxypath = 'http://47.94.169.143:8004'; break;
 }
 var options = {
@@ -77,7 +77,7 @@ app.use(hotMiddleware)
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://localhost:' + port
+var uri = 'http://0.0.0.0:' + port
 
 var _resolve
 var readyPromise = new Promise(resolve => {

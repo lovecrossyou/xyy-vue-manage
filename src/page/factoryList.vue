@@ -4,8 +4,8 @@
 
     <div class="search_container">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="店铺名称">
-          <el-input v-model="formInline.name" placeholder="请输入店铺名称"></el-input>
+        <el-form-item label="厂家名称">
+          <el-input v-model="formInline.name" placeholder="请输入厂家名称"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="searchShop">模糊查询</el-button>
@@ -18,16 +18,16 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="店铺名称">
+              <el-form-item label="厂家名称">
                 <span>{{ props.row.name }}</span>
               </el-form-item>
-              <el-form-item label="店铺地址">
+              <el-form-item label="地址">
                 <span>{{ props.row.address }}</span>
               </el-form-item>
-              <el-form-item label="店铺介绍">
-                <span>{{ props.row.description }}</span>
+              <el-form-item label="介绍">
+                <span>{{ props.row.promotion_info }}</span>
               </el-form-item>
-              <el-form-item label="店铺 ID">
+              <el-form-item label="厂家 ID">
                 <span>{{ props.row.id }}</span>
               </el-form-item>
               <el-form-item label="联系电话">
@@ -36,22 +36,15 @@
               <el-form-item label="评分">
                 <span>{{ props.row.rating }}</span>
               </el-form-item>
-              <el-form-item label="销售量">
-                <span>{{ props.row.recent_order_num }}</span>
-              </el-form-item>
-              <el-form-item label="分类">
-                <span>{{ props.row.category }}</span>
-              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="店铺名称" prop="name"></el-table-column>
-        <el-table-column label="店铺地址" prop="address"></el-table-column>
-        <el-table-column label="店铺介绍" prop="description"></el-table-column>
+        <el-table-column label="厂家名称" prop="name"></el-table-column>
+        <el-table-column label="地址" prop="address"></el-table-column>
+        <el-table-column label="介绍" prop="promotion_info"></el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="Success" @click="addFood(scope.$index, scope.row)">添加食品</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -66,9 +59,9 @@
           :total="count"
         ></el-pagination>
       </div>
-      <el-dialog title="修改店铺信息" v-model="dialogFormVisible">
+      <el-dialog title="修改厂家信息" v-model="dialogFormVisible">
         <el-form :model="selectTable">
-          <el-form-item label="店铺名称" label-width="100px">
+          <el-form-item label="厂家名称" label-width="100px">
             <el-input v-model="selectTable.name" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="详细地址" label-width="100px">
@@ -81,16 +74,13 @@
             ></el-autocomplete>
             <span>当前城市：{{city.name}}</span>
           </el-form-item>
-          <el-form-item label="店铺介绍" label-width="100px">
-            <el-input v-model="selectTable.description"></el-input>
+          <el-form-item label="厂家介绍" label-width="100px">
+            <el-input v-model="selectTable.promotion_info"></el-input>
           </el-form-item>
           <el-form-item label="联系电话" label-width="100px">
             <el-input v-model="selectTable.phone"></el-input>
           </el-form-item>
-          <el-form-item label="店铺分类" label-width="100px">
-            <el-cascader :options="categoryOptions" v-model="selectedCategory" change-on-select></el-cascader>
-          </el-form-item>
-          <el-form-item label="商铺图片" label-width="100px">
+          <el-form-item label="厂家图片" label-width="100px">
             <el-upload
               class="avatar-uploader"
               :action="baseUrl + '/v1/addimg/shop'"
@@ -105,7 +95,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updateShop">确 定</el-button>
+          <el-button type="primary" @click="updateFactory">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -117,10 +107,12 @@ import headTop from "../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
 import {
   cityGuess,
-  getResturants,
+  getFactoryList,
   getResturantsCount,
+  getFactoryCount,
   foodCategory,
   updateResturant,
+  updateFactory,
   searchplace,
   deleteResturant
 } from "@/api/getData";
@@ -153,18 +145,18 @@ export default {
   },
   methods: {
     searchShop(){
-        this.getResturants();
+        this.getFactoryList();
     },
     async initData() {
       try {
         this.city = await cityGuess();
-        const countData = await getResturantsCount();
+        const countData = await getFactoryCount();
         if (countData.status == 1) {
           this.count = countData.count;
         } else {
           throw new Error("获取数据失败");
         }
-        this.getResturants();
+        this.getFactoryList();
       } catch (err) {
         console.log("获取数据失败", err);
       }
@@ -195,29 +187,14 @@ export default {
         console.log("获取商铺种类失败", err);
       }
     },
-    async getResturants() {
+    async getFactoryList() {
       const { latitude, longitude } = this.city;
-      const restaurants = await getResturants({
-        latitude,
-        longitude,
+      const factories = await getFactoryList({
         offset: this.offset,
         limit: this.limit,
         keyword:this.formInline.name
       });
-      this.tableData = [];
-      restaurants.forEach(item => {
-        const tableData = {};
-        tableData.name = item.name;
-        tableData.address = item.address;
-        tableData.description = item.description;
-        tableData.id = item.id;
-        tableData.phone = item.phone;
-        tableData.rating = item.rating;
-        tableData.recent_order_num = item.recent_order_num;
-        tableData.category = item.category;
-        tableData.image_path = item.image_path;
-        this.tableData.push(tableData);
-      });
+      this.tableData = factories;
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -299,16 +276,15 @@ export default {
       }
       return isRightType && isLt2M;
     },
-    async updateShop() {
+    async updateFactory() {
       this.dialogFormVisible = false;
       try {
         Object.assign(this.selectTable, this.address);
-        this.selectTable.category = this.selectedCategory.join("/");
-        const res = await updateResturant(this.selectTable);
+        const res = await updateFactory(this.selectTable);
         if (res.status == 1) {
           this.$message({
             type: "success",
-            message: "更新店铺信息成功"
+            message: "更新厂家信息成功"
           });
           this.getResturants();
         } else {
