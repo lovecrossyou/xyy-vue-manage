@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { request } from 'http';
 
 Vue.use(Router)
 
@@ -7,6 +8,8 @@ const login = r => require.ensure([], () => r(require('@/page/login')), 'login')
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 const addShop = r => require.ensure([], () => r(require('@/page/addShop')), 'addShop');
+const addFactory = r => require.ensure([], () => r(require('@/page/addFactory')), 'addFactory');
+
 const addGoods = r => require.ensure([], () => r(require('@/page/addGoods')), 'addGoods');
 const userList = r => require.ensure([], () => r(require('@/page/userList')), 'userList');
 const shopList = r => require.ensure([], () => r(require('@/page/shopList')), 'shopList');
@@ -20,6 +23,8 @@ const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vue
 const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'adminSet');
 const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage')), 'sendMessage');
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
+const banner = r => require.ensure([], () => r(require('@/page/bannerList')), 'bannerList');
+const factoryList = r => require.ensure([], () => r(require('@/page/factoryList')), 'factoryList');
 
 const routes = [
 	{
@@ -90,6 +95,20 @@ const routes = [
 			path: '/explain',
 			component: explain,
 			meta: ['说明', '说明'],
+		},{
+			path:'/bannerList',
+			component: banner,
+			meta: ['数据管理', '首页轮播图'],
+
+		},{
+			path:'/factoryList',
+			component:factoryList,
+			meta: ['数据管理', '厂家列表'],
+
+		},{
+			path:'/addFactory',
+			component:addFactory,
+			meta: ['添加数据', '添加厂家'],
 		}]
 	}
 ]

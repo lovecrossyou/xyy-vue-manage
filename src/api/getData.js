@@ -19,6 +19,13 @@ export const singout = () => fetch('/admin/singout');
 export const getAdminInfo = () => fetch('/admin/info');
 
 /**
+ * 
+ * @param {更新管理员信息} date 
+ */
+export const updateAdminInfo = status => fetch('/admin/updateStatus/'+status,{},'POST');
+
+
+/**
  * api请求量
  */
 
@@ -226,3 +233,9 @@ export const getAddressById = address_id => fetch('/v1/addresse/' + address_id);
  */
 
 export const getUserCity = () => fetch('/v1/user/city/count');
+
+//轮播管理 , 
+export const getBannerList = () => fetch('/banner/list');
+export const delBanner = () => fetch('/banner/delBanner');
+
+
