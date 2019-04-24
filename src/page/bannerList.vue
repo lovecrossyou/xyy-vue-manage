@@ -175,7 +175,7 @@ export default {
 }
 
 .showimg {
-  width: 60px;
+  // width: 60px;
   height: 24px;
 }
 
@@ -198,8 +198,9 @@ export default {
   text-align: center;
 }
 .avatar {
-  width: 120px;
+  // width: 120px;
   height: 120px;
   display: block;
+
 }
 </style>
