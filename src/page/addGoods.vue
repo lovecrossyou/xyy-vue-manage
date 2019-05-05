@@ -74,10 +74,13 @@
 					</el-form-item>
 					<el-row v-if="foodSpecs == 'one'">
 						<el-form-item label="包装费">
-							<el-input-number v-model="foodForm.specs[0].packing_fee" :min="0" :max="100"></el-input-number>
+							<el-input-number v-model="foodForm.specs[0].packing_fee" :precision="2" :step="0.1" ></el-input-number>
 						</el-form-item>
 						<el-form-item label="价格">
-							<el-input-number v-model="foodForm.specs[0].price" :min="0" :max="10000"></el-input-number>
+							 <el-input-number v-model="foodForm.specs[0].price" :precision="2" :step="0.1"></el-input-number>
+						</el-form-item>
+						<el-form-item label="爱心捐助">
+							 <el-input-number v-model="foodForm.specs[0].donate_amount" :min="0" :precision="2" :step="0.01"></el-input-number>
 						</el-form-item>
 					</el-row>
 					<el-row v-else style="overflow: auto; text-align: center;">
@@ -159,7 +162,8 @@
     				specs: [{
     					specs: '默认',
 			          	packing_fee: 0,
-			          	price: 20,
+									price: 20.99,
+									donate_amount:0.01
     				}],
     			},
     			foodrules: {
