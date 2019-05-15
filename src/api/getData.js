@@ -155,6 +155,10 @@ export const updateResturant = data => fetch('/shopping/updateshop', data, 'POST
 
 export const deleteResturant = restaurant_id => fetch('/shopping/restaurant/' + restaurant_id, {}, 'DELETE');
 
+// 删除厂商 
+export const deleteFactory = factory_id => fetch('/factory/' + factory_id, {}, 'DELETE');
+
+
 /**
  * 获取食品列表
  */

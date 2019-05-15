@@ -114,7 +114,7 @@ import {
   updateResturant,
   updateFactory,
   searchplace,
-  deleteResturant
+  deleteFactory
 } from "@/api/getData";
 export default {
   data() {
@@ -218,7 +218,7 @@ export default {
     },
     async handleDelete(index, row) {
       try {
-        const res = await deleteResturant(row.id);
+        const res = await deleteFactory(row.id);
         if (res.status == 1) {
           this.$message({
             type: "success",
