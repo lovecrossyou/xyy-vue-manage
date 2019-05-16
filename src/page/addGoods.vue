@@ -164,7 +164,7 @@ export default {
     return {
       baseUrl,
       baseImgPath,
-      restaurant_id: 1,
+      restaurant_id: null,
       categoryForm: {
         categoryList: [],
         categorySelect: "",
@@ -218,8 +218,7 @@ export default {
   created() {
     if (this.$route.query.restaurant_id) {
       this.restaurant_id = this.$route.query.restaurant_id;
-    } else {
-      this.restaurant_id = Math.ceil(Math.random() * 10);
+    } else if(!this.restaurant_id) {
       this.$msgbox({
         title: "提示",
         message: "添加食品需要选择一个商铺，先去就去选择商铺吗？",
