@@ -44,7 +44,8 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'),resolve('/node_modules/time-formater')],
+        // exclude: /node_modules/,
+        include: [resolve('src'), resolve('test'),resolve('/node_modules/time-formater'),resolve('/node_modules/quill-image-extend-module')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

@@ -238,7 +238,7 @@ export default {
   },
   methods: {
     searchShop(){
-
+      
     },
     async remoteMethod(query) {
       if (query !== "") {
