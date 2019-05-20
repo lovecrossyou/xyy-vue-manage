@@ -86,7 +86,7 @@ export default {
   margin-bottom: 40px;
 }
 .editer {
-  height: 350px;
+  height: 450px;
 }
 .submit_btn {
   text-align: center;
