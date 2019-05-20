@@ -10,7 +10,7 @@
           filterable
           remote
           reserve-keyword
-          placeholder="请输入店铺名称"
+          placeholder="请输入商品名称"
           :remote-method="remoteMethod"
           :loading="loading"
         >

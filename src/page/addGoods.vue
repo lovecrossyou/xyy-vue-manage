@@ -73,6 +73,24 @@
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
+
+          <el-form-item label="上传食品详情">
+            <el-upload
+              :action="baseUrl + '/v1/addimg/food'"
+              list-type="picture-card"
+              :on-success="uploadDetails"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :before-upload="beforeImgUpload"
+              class="avatar-uploader"
+            >
+              <i class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img class="avatar" :src="dialogImageUrl" alt>
+            </el-dialog>
+          </el-form-item>
+
           <el-form-item label="食品特点">
             <el-select v-model="foodForm.attributes" multiple placeholder="请选择">
               <el-option
@@ -141,7 +159,7 @@
             <el-form-item label="价格" label-width="100px">
               <el-input-number v-model="specsForm.price" :precision="2" :step="0.1"></el-input-number>
             </el-form-item>
-						<el-form-item label="爱心捐助" label-width="100px">
+            <el-form-item label="爱心捐助" label-width="100px">
               <el-input-number v-model="specsForm.donate_amount" :precision="2" :step="0.01"></el-input-number>
             </el-form-item>
           </el-form>
@@ -162,6 +180,9 @@ import { baseUrl, baseImgPath } from "@/config/env";
 export default {
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
+      image_details: [],
       baseUrl,
       baseImgPath,
       restaurant_id: null,
@@ -218,7 +239,7 @@ export default {
   created() {
     if (this.$route.query.restaurant_id) {
       this.restaurant_id = this.$route.query.restaurant_id;
-    } else if(!this.restaurant_id) {
+    } else if (!this.restaurant_id) {
       this.$msgbox({
         title: "提示",
         message: "添加食品需要选择一个商铺，先去就去选择商铺吗？",
@@ -249,6 +270,30 @@ export default {
     }
   },
   methods: {
+    handleRemove(file, fileList) {
+      const del_image = file.response.image_path;
+      const image_details_new = [];
+      this.image_details.forEach(element => {
+        if(element!= del_image){
+          image_details_new.push(element);
+        }
+      });
+      this.image_details = image_details_new;
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    // 上传商品详情
+    uploadDetails(res, file) {
+      if (res.status == 1) {
+        this.image_details.push(res.image_path);
+        console.log("this.image_details ", this.image_details);
+        // this.foodForm.image_path = res.image_path;
+      } else {
+        this.$message.error("上传图片失败！");
+      }
+    },
     async initData() {
       try {
         const result = await getCategory(this.restaurant_id);
@@ -308,6 +353,7 @@ export default {
         this.$message.error("上传图片失败！");
       }
     },
+
     beforeImgUpload(file) {
       const isRightType =
         file.type === "image/jpeg" || file.type === "image/png";
@@ -345,7 +391,8 @@ export default {
           const params = {
             ...this.foodForm,
             category_id: this.selectValue.id,
-            restaurant_id: this.restaurant_id
+            restaurant_id: this.restaurant_id,
+            image_details: this.image_details,
           };
           try {
             const result = await addFood(params);
@@ -361,6 +408,7 @@ export default {
                 image_path: "",
                 activity: "",
                 attributes: [],
+                image_details: [],
                 specs: [
                   {
                     specs: "默认",
@@ -476,10 +524,24 @@ export default {
   line-height: 120px;
   text-align: center;
 }
+.el-upload--picture-card {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+}
+
 .avatar {
   width: 120px;
   height: 120px;
   display: block;
+}
+
+.el-upload-list--picture-card .el-upload-list__item {
+  width: 120px;
+  height: 120px;
 }
 .cell {
   text-align: center;
