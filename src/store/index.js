@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 const state = {
 	adminInfo: {
-		avatar: 'http://static.kuaimayoupin.com/16a17111a44.png'
+		avatar: 'http://static.kuaimayoupin.com/16a17111a44.png',
+		id:null
 	},
 }
 

@@ -237,6 +237,9 @@ export default {
     headTop
   },
   methods: {
+    searchShop(){
+
+    },
     async remoteMethod(query) {
       if (query !== "") {
         this.loading = true;
