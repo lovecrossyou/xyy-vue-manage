@@ -1,28 +1,13 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-
     <div class="search_container">
       <el-form :inline="true" class="demo-form-inline">
-        <el-select
-          v-model="restaurant_name"
-          multiple
-          filterable
-          remote
-          reserve-keyword
-          placeholder="请输入商品名称"
-          :remote-method="remoteMethod"
-          :loading="loading"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
+        <el-form-item label="商品名称">
+          <el-input v-model="product_name" placeholder="请输入商品名称"></el-input>
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="searchShop">查询</el-button>
+          <el-button type="primary" @click="getFoods">模糊查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -183,7 +168,7 @@ import {
 export default {
   data() {
     return {
-      restaurant_name: "",
+      product_name: null,
       options: [],
       value: [],
       list: [],
@@ -237,25 +222,18 @@ export default {
     headTop
   },
   methods: {
-    searchShop(){
-      
-    },
     async remoteMethod(query) {
       if (query !== "") {
         this.loading = true;
-        const restaurants = await getResturants({
-          offset: 0,
-          limit: 20,
-          keyword: query
-        });
-        this.options = [{
-            value:'1',
-            label:'2'
-        }]
-        
-        // this.options = restaurants.map(item=>item.name);
+        this.product_name = query;
+        this.getFoods();
+        // const restaurants = await getResturants({
+        //   offset: 0,
+        //   limit: 20,
+        //   keyword: query
+        // });     
       } else {
-        this.options = [];
+        // this.options = [];
       }
     },
     async initData() {
@@ -302,12 +280,18 @@ export default {
         console.log("获取食品种类失败", err);
       }
     },
+
     async getFoods() {
-      const Foods = await getFoods({
+      const params = {
         offset: this.offset,
         limit: this.limit,
         restaurant_id: this.restaurant_id
-      });
+      };
+      if(this.product_name){
+        params.keyword = this.product_name;
+      }
+
+      const Foods = await getFoods(params);
       this.tableData = [];
       Foods.forEach((item, index) => {
         const tableData = {};
