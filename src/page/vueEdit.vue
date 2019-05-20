@@ -10,6 +10,7 @@
         @ready="onEditorReady($event)"
       ></quill-editor>
     </div>
+    
     <div class="submit_btn">
       <el-button type="primary" @click="submit">提交</el-button>
     </div>
@@ -52,7 +53,7 @@ export default {
                 QuillWatch.emit(this.quill.id);
               }
             }
-          }
+          },
         }
       }
     };
@@ -89,5 +90,34 @@ export default {
 }
 .submit_btn {
   text-align: center;
+}
+
+.ql-snow .ql-editor pre.ql-syntax::after {
+  background: #e1e1e1;
+}
+
+.quill-code {
+  height: auto;
+  border: none;
+  > .title {
+    border: 1px solid #ccc;
+    border-left: none;
+    height: 3em;
+    line-height: 3em;
+    text-indent: 1rem;
+    font-weight: bold;
+  }
+  > code {
+    width: 100%;
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-left: none;
+    border-radius: 0;
+    height: 30rem;
+    overflow-y: auto;
+    background: #ccc;
+  }
 }
 </style>
