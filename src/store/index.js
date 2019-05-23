@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getAdminInfo } from '@/api/getData'
 
+import shop from "./shop"
+
 Vue.use(Vuex)
 
 const state = {
@@ -33,6 +35,9 @@ const actions = {
 }
 
 export default new Vuex.Store({
+	modules: {
+		shop
+	},
 	state,
 	actions,
 	mutations,

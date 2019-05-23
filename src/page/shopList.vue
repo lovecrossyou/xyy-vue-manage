@@ -14,7 +14,7 @@
     </div>
 
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="shoplist" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -124,11 +124,13 @@ import {
   searchplace,
   deleteResturant
 } from "@/api/getData";
+import { mapState, mapActions } from "vuex";
+
 export default {
   data() {
     return {
       formInline: {
-          name:''
+        name: ""
       },
       baseUrl,
       baseImgPath,
@@ -151,9 +153,21 @@ export default {
   components: {
     headTop
   },
+  computed: {
+    ...mapState("shop", ["shoplist"])
+  },
   methods: {
-    searchShop(){
-        this.getResturants();
+    ...mapActions("shop", ["getResturants"]),
+    searchShop() {
+      const { latitude, longitude } = this.city;
+        const params = {
+          latitude,
+          longitude,
+          offset: this.offset,
+          limit: this.limit,
+          keyword: this.formInline.name
+        };
+      this.getResturants(params);
     },
     async initData() {
       try {
@@ -164,7 +178,16 @@ export default {
         } else {
           throw new Error("获取数据失败");
         }
-        this.getResturants();
+        const { latitude, longitude } = this.city;
+        const params = {
+          latitude,
+          longitude,
+          offset: this.offset,
+          limit: this.limit,
+          keyword: this.formInline.name
+        };
+        this.$store.dispatch('shop/getResturants',params);
+        // this.getResturants(params);
       } catch (err) {
         console.log("获取数据失败", err);
       }
@@ -195,30 +218,6 @@ export default {
         console.log("获取商铺种类失败", err);
       }
     },
-    async getResturants() {
-      const { latitude, longitude } = this.city;
-      const restaurants = await getResturants({
-        latitude,
-        longitude,
-        offset: this.offset,
-        limit: this.limit,
-        keyword:this.formInline.name
-      });
-      this.tableData = [];
-      restaurants.forEach(item => {
-        const tableData = {};
-        tableData.name = item.name;
-        tableData.address = item.address;
-        tableData.description = item.description;
-        tableData.id = item.id;
-        tableData.phone = item.phone;
-        tableData.rating = item.rating;
-        tableData.recent_order_num = item.recent_order_num;
-        tableData.category = item.category;
-        tableData.image_path = item.image_path;
-        this.tableData.push(tableData);
-      });
-    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -237,6 +236,7 @@ export default {
       }
     },
     addFood(index, row) {
+      this.$store.commit('shop/saveid',row.id);
       this.$router.push({ path: "addGoods", query: { restaurant_id: row.id } });
     },
     async handleDelete(index, row) {
@@ -247,7 +247,7 @@ export default {
             type: "success",
             message: "删除店铺成功"
           });
-          this.tableData.splice(index, 1);
+          this.shoplist.splice(index, 1);
         } else {
           throw new Error(res.message);
         }
@@ -339,8 +339,8 @@ export default {
   margin-bottom: 0;
   width: 50%;
 }
-.search_container{
-    padding: 20px 20px 0 20px;
+.search_container {
+  padding: 20px 20px 0 20px;
 }
 
 .table_container {

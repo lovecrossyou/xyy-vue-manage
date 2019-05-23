@@ -177,6 +177,9 @@
 import headTop from "@/components/headTop";
 import { getCategory, addCategory, addFood } from "@/api/getData";
 import { baseUrl, baseImgPath } from "@/config/env";
+import { mapState, mapActions } from "vuex";
+
+
 export default {
   data() {
     return {
@@ -185,7 +188,7 @@ export default {
       image_details: [],
       baseUrl,
       baseImgPath,
-      restaurant_id: null,
+      // restaurant_id: null,
       categoryForm: {
         categoryList: [],
         categorySelect: "",
@@ -236,33 +239,39 @@ export default {
   components: {
     headTop
   },
-  created() {
-    if (this.$route.query.restaurant_id) {
-      this.restaurant_id = this.$route.query.restaurant_id;
-    } else if (!this.restaurant_id) {
-      this.$msgbox({
-        title: "提示",
-        message: "添加食品需要选择一个商铺，先去就去选择商铺吗？",
-        showCancelButton: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        beforeClose: (action, instance, done) => {
-          if (action === "confirm") {
-            this.$router.push("/shopList");
-            done();
-          } else {
-            this.$message({
-              type: "info",
-              message: "取消"
-            });
-            done();
-          }
-        }
-      });
+  watch:{
+    restaurant_id(){
+      this.initData();
     }
+  },
+  mounted() {
+    // if (this.restaurant_id) {
+    //   // this.restaurant_id = this.select_restaurant_id;
+    // } else if (!this.restaurant_id) {
+    //   this.$msgbox({
+    //     title: "提示",
+    //     message: "添加食品需要选择一个商铺，先去就去选择商铺吗？",
+    //     showCancelButton: true,
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     beforeClose: (action, instance, done) => {
+    //       if (action === "confirm") {
+    //         this.$router.push("/shopList");
+    //         done();
+    //       } else {
+    //         this.$message({
+    //           type: "info",
+    //           message: "取消"
+    //         });
+    //         done();
+    //       }
+    //     }
+    //   });
+    // }
     this.initData();
   },
   computed: {
+    ...mapState("shop",['restaurant_id']),
     selectValue: function() {
       return (
         this.categoryForm.categoryList[this.categoryForm.categorySelect] || {}
