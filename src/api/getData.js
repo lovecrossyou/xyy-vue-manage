@@ -256,5 +256,6 @@ export const updateFactory = data => fetch('/factory/updatefactory',data, 'POST'
 // count
 export const getFactoryCount = () => fetch('/factory/count');
 
-
+//品牌
+export const fetchBrandList = ()=> fetch('/brand/list');
 

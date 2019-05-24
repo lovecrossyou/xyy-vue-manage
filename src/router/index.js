@@ -26,6 +26,7 @@ const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage'
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const banner = r => require.ensure([], () => r(require('@/page/bannerList')), 'bannerList');
 const factoryList = r => require.ensure([], () => r(require('@/page/factoryList')), 'factoryList');
+const brandList = r => require.ensure([], () => r(require('@/page/brand')), 'brandList');
 
 const routes = [
 	{
@@ -114,6 +115,10 @@ const routes = [
 			path:'/addFactory',
 			component:addFactory,
 			meta: ['添加数据', '添加厂家'],
+		},{
+			path:'/brandList',
+			component:brandList,
+			meta: ['添加数据', '品牌列表'],
 		}]
 	}
 ]
