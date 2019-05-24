@@ -7,6 +7,7 @@
 			    @expand='expand'
                 :expand-row-keys='expendRow'
                 :row-key="row => row.index"
+                border
 			    style="width: 100%">
 			    <el-table-column type="expand">
 			      <template slot-scope="props">

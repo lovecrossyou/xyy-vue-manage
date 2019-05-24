@@ -19,6 +19,7 @@
         :expand-row-keys="expendRow"
         :row-key="row => row.index"
         style="width: 100%"
+        border
       >
         <el-table-column type="expand">
           <template slot-scope="props">

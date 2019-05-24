@@ -62,7 +62,7 @@ export default {
 <style lang="less">
 @import "../style/mixin";
 .header_container {
-  background-color: #eff2f7;
+  background-color: #fff;
   height: 60px;
   display: flex;
   justify-content: space-between;

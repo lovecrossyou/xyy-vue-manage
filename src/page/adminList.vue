@@ -2,7 +2,7 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" style="width: 100%" border>
         <el-table-column prop="user_name" label="姓名" width="180"></el-table-column>
         <el-table-column prop="create_time" label="注册日期" width="220"></el-table-column>
         <el-table-column prop="city" label="地址" width="180"></el-table-column>

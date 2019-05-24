@@ -5,6 +5,7 @@
             <el-table
                 :data="tableData"
                 highlight-current-row
+                border
                 style="width: 100%">
                 <el-table-column
                   type="index"

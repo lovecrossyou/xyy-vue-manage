@@ -1,7 +1,6 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-
     <div class="search_container">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="店铺名称">
@@ -14,7 +13,7 @@
     </div>
 
     <div class="table_container">
-      <el-table :data="shoplist" style="width: 100%">
+      <el-table :data="shoplist" style="width: 100%" border>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -48,7 +47,7 @@
         <el-table-column label="店铺名称" prop="name"></el-table-column>
         <el-table-column label="店铺地址" prop="address"></el-table-column>
         <el-table-column label="店铺介绍" prop="description"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" width="260">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini" type="Success" @click="addFood(scope.$index, scope.row)">添加食品</el-button>
@@ -327,6 +326,7 @@ export default {
 
 <style lang="less">
 @import "../style/mixin";
+
 .demo-table-expand {
   font-size: 0;
 }
