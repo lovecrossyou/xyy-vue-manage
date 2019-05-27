@@ -27,7 +27,7 @@
     </div>
 
     <!-- 编辑信息 -->
-    <el-dialog title="修改权限" v-model="dialogFormVisible">
+    <el-dialog title="修改权限" :visible.sync="dialogFormVisible">
       <el-form :model="selectTable">
         <el-form-item label="名称" label-width="100px">
           <el-input v-model="selectTable.user_name" auto-complete="off"></el-input>

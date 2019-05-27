@@ -32,7 +32,7 @@
       </div>
 
       <!-- 编辑信息 -->
-      <el-dialog title="添加/修改轮播" v-model="dialogFormVisible">
+      <el-dialog title="添加/修改轮播" :visible.sync="dialogFormVisible">
         <el-form :model="selectTable">
           <el-form-item label="图片" label-width="100px">
             <el-upload

@@ -24,7 +24,7 @@
               <i class="el-icon-plus"></i>添加数据
             </template>
             <el-menu-item index="addShop">添加商铺</el-menu-item>
-            <!-- <el-menu-item index="addGoods">添加商品</el-menu-item> -->
+            <!-- <el-menu-item index="brandList">添加品牌</el-menu-item> -->
             <el-menu-item index="addFactory">添加厂家</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
