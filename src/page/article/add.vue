@@ -3,7 +3,7 @@
     <head-top></head-top>
     <el-row style="margin-top: 20px;">
       <el-col :span="12" :offset="1">
-        <el-form ref="form" :model="formData" :rules="rules" label-width="110px" class="form">
+        <el-form ref="articleForm" :model="formData" :rules="rules" label-width="110px" class="form">
           <el-form-item label="文章标题" prop="title">
             <el-input v-model="formData.title"></el-input>
           </el-form-item>
@@ -11,12 +11,13 @@
             <el-input v-model="formData.subtitle"></el-input>
           </el-form-item>
           <el-form-item label="文章分类" prop="sort_id">
-            <el-cascader
+            <el-input v-model="formData.sort_id"></el-input>
+            <!-- <el-cascader
               :options="sort_data"
               v-model="sort_id"
               change-on-select
               :props="defaultProps"
-            ></el-cascader>
+            ></el-cascader> -->
           </el-form-item>
           <el-form-item label="文章概要" prop="description">
             <el-input type="textarea" v-model="formData.description"></el-input>
@@ -29,7 +30,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="来源">
-            <el-input :value="formData.source" style="width:217px;opacity: 0.5"></el-input>
+            <el-input v-model="formData.source" ></el-input>
           </el-form-item>
           <el-form-item label="封面图片">
             <el-upload
@@ -69,6 +70,7 @@ import { quillEditor, Quill } from "vue-quill-editor";
 import { container, ImageExtend, QuillWatch } from "quill-image-extend-module";
 import ImageResize from "quill-image-resize-module";
 import { baseUrl, baseImgPath } from "@/config/env";
+import { addArticle } from "@/api/getData";
 
 Quill.register("modules/ImageExtend", ImageExtend);
 // use resize module
@@ -117,7 +119,7 @@ export default {
         user_name: "猪猪侠",
         pic: "",
         read_type: 4,
-        content: "",
+        content: ""
       },
       rules: {
         sort_id: { required: true, message: "分类不能为空" },
@@ -183,9 +185,22 @@ export default {
     onEditorReady(editor) {
       console.log("editor ready!", editor);
     },
-    submit() {
+    async submit() {
       console.log(this.formData);
-      this.$message.success("提交成功！");
+      this.$refs['articleForm'].validate(async valid => {
+        if (valid) {
+          const res = await addArticle(this.formData);
+          this.$message.success("提交成功！");
+        } else {
+          this.$notify.error({
+            title: "错误",
+            message: "请检查输入是否正确",
+            offset: 100
+          });
+        }
+      });
+
+      
     },
     successUpload(data) {
       this.data.pic = formData.filename;
@@ -270,6 +285,15 @@ export default {
     height: 30rem;
     overflow-y: auto;
     background: #ccc;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
   }
 
   .avatar-uploader .el-upload {
