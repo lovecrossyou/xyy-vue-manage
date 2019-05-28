@@ -27,6 +27,13 @@ const explain = r => require.ensure([], () => r(require('@/page/explain')), 'exp
 const banner = r => require.ensure([], () => r(require('@/page/bannerList')), 'bannerList');
 const factoryList = r => require.ensure([], () => r(require('@/page/factoryList')), 'factoryList');
 
+
+
+//文章管理
+const articleList = r => require.ensure([], () => r(require('@/page/article/list')), 'articleList');
+const articleAdd = r => require.ensure([], () => r(require('@/page/article/add')), 'articleAdd');
+const articleSort = r => require.ensure([], () => r(require('@/page/article/sort')), 'articleSort');
+
 const routes = [
 	{
 		path: '/',
@@ -114,6 +121,18 @@ const routes = [
 			path:'/addFactory',
 			component:addFactory,
 			meta: ['添加数据', '添加厂家'],
+		},{
+			path:'/articleList',
+			component:articleList,
+			meta: ['文章管理', '文章列表'],
+		},{
+			path:'/articleAdd',
+			component:articleAdd,
+			meta: ['文章管理', '添加文章'],
+		},{
+			path:'/articleSort',
+			component:articleSort,
+			meta: ['文章管理', '添加分类'],
 		}]
 	}
 ]

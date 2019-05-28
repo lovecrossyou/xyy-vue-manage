@@ -245,29 +245,6 @@ export default {
     }
   },
   mounted() {
-    // if (this.restaurant_id) {
-    //   // this.restaurant_id = this.select_restaurant_id;
-    // } else if (!this.restaurant_id) {
-    //   this.$msgbox({
-    //     title: "提示",
-    //     message: "添加食品需要选择一个商铺，先去就去选择商铺吗？",
-    //     showCancelButton: true,
-    //     confirmButtonText: "确定",
-    //     cancelButtonText: "取消",
-    //     beforeClose: (action, instance, done) => {
-    //       if (action === "confirm") {
-    //         this.$router.push("/shopList");
-    //         done();
-    //       } else {
-    //         this.$message({
-    //           type: "info",
-    //           message: "取消"
-    //         });
-    //         done();
-    //       }
-    //     }
-    //   });
-    // }
     this.initData();
   },
   computed: {
@@ -555,4 +532,6 @@ export default {
 .cell {
   text-align: center;
 }
+
+
 </style>

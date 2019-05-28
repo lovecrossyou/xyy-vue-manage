@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import headTop from "../components/headTop";
+import headTop from "@/components/headTop";
 import { quillEditor, Quill } from "vue-quill-editor";
 import { container, ImageExtend, QuillWatch } from "quill-image-extend-module";
 import ImageResize from "quill-image-resize-module";
