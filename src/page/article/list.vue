@@ -49,6 +49,7 @@
 </template>
 <script type="text/javascript">
 import headTop from "@/components/headTop";
+import { listArticle } from "@/api/getData";
 
 export default {
   name: "list",
@@ -286,16 +287,18 @@ export default {
       );
     },
     // ajax请求列表数据
-    ajaxData() {
+    async ajaxData() {
       let p = this.sort_id;
       this.search_data.sort_id = p.length ? p.slice(-1)[0] : "";
-      utils.ajax.call(this, "/listArticle", this.search_data, (obj, err) => {
-        if (!err) {
-          this.table_data.data = obj.data;
-          this.table_data.total = obj.total;
-          this.search_data.page = obj.page;
-        }
-      });
+      const obj = await listArticle();
+      this.table_data.data = obj.data;
+      // utils.ajax.call(this, "/listArticle", this.search_data, (obj, err) => {
+      //   if (!err) {
+      //     this.table_data.data = obj.data;
+      //     this.table_data.total = obj.total;
+      //     this.search_data.page = obj.page;
+      //   }
+      // });
     },
     // 点击查询
     onSearch() {

@@ -262,3 +262,4 @@ export const fetchBrandList = ()=> fetch('/brand/list');
 
 
 export const addArticle = data=> fetch('/article/add',data,'POST');
+export const listArticle = data=> fetch('/article/list');
