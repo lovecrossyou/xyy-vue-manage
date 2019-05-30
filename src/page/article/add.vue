@@ -1,58 +1,65 @@
 <template>
   <div>
     <head-top></head-top>
-    <el-row style="margin-top: 20px;">
-      <el-col :span="12" :offset="1">
-        <el-form
-          ref="articleForm"
-          :model="formData"
-          :rules="rules"
-          label-width="110px"
-          class="form"
-        >
-          <el-form-item label="文章标题" prop="title">
-            <el-input v-model="formData.title"></el-input>
-          </el-form-item>
-          <el-form-item label="文章副标题" prop="title">
-            <el-input v-model="formData.subtitle"></el-input>
-          </el-form-item>
-          <el-form-item label="文章分类" prop="sort_id">
-            <el-input v-model="formData.sort_id"></el-input>
-            <!-- <el-cascader
+    <div class="main">
+      <el-collapse v-model="activeNames">
+      <el-collapse-item title="基本设置" name="1">
+        <el-row style="margin-top: 20px;">
+          <el-col :span="12" :offset="1">
+            <el-form
+              ref="articleForm"
+              :model="formData"
+              :rules="rules"
+              label-width="110px"
+              class="form"
+            >
+              <el-form-item label="文章标题" prop="title">
+                <el-input v-model="formData.title"></el-input>
+              </el-form-item>
+              <el-form-item label="文章副标题" prop="title">
+                <el-input v-model="formData.subtitle"></el-input>
+              </el-form-item>
+              <el-form-item label="文章分类" prop="sort_id">
+                <el-input v-model="formData.sort_id"></el-input>
+                <!-- <el-cascader
               :options="sort_data"
               v-model="sort_id"
               change-on-select
               :props="defaultProps"
-            ></el-cascader>-->
-          </el-form-item>
-          <el-form-item label="文章概要" prop="description">
-            <el-input type="textarea" v-model="formData.description"></el-input>
-          </el-form-item>
-          <el-form-item label="作者">
-            <el-input
-              readonly="readonly"
-              :value="formData.user_name"
-              style="width:217px;opacity: 0.5"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="来源">
-            <el-input v-model="formData.source"></el-input>
-          </el-form-item>
-          <el-form-item label="封面图片">
-            <el-upload
-              class="avatar-uploader"
-              :action="baseUrl + '/v1/addimg/food'"
-              :show-file-list="false"
-              :on-success="uploadImg"
-              :before-upload="beforeImgUpload"
-            >
-              <img v-if="formData.pic" :src="baseImgPath + formData.pic" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
+                ></el-cascader>-->
+              </el-form-item>
+              <el-form-item label="文章概要" prop="description">
+                <el-input type="textarea" v-model="formData.description"></el-input>
+              </el-form-item>
+              <el-form-item label="作者">
+                <el-input
+                  readonly="readonly"
+                  :value="formData.user_name"
+                  style="width:217px;opacity: 0.5"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="来源">
+                <el-input v-model="formData.source"></el-input>
+              </el-form-item>
+              <el-form-item label="封面图片">
+                <el-upload
+                  class="avatar-uploader"
+                  :action="baseUrl + '/v1/addimg/food'"
+                  :show-file-list="false"
+                  :on-success="uploadImg"
+                  :before-upload="beforeImgUpload"
+                >
+                  <img v-if="formData.pic" :src="baseImgPath + formData.pic" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+      </el-collapse-item>
+    </el-collapse>
+    </div>
+
 
     <div class="edit_container">
       <quill-editor
@@ -79,9 +86,9 @@ import { baseUrl, baseImgPath } from "@/config/env";
 import { addArticle, updateArticle } from "@/api/getData";
 import { mapState, mapActions } from "vuex";
 
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 
 Quill.register("modules/ImageExtend", ImageExtend);
 // use resize module
@@ -90,6 +97,7 @@ Quill.register("modules/ImageResize", ImageResize);
 export default {
   data() {
     return {
+      activeNames: ["1"],
       baseUrl,
       baseImgPath,
       content: "<h3>说些什么吧~~</h3>",
@@ -239,6 +247,10 @@ export default {
 
 <style lang="less">
 @import "../../style/mixin";
+
+.main{
+  padding: 0px  40px;
+}
 
 .edit_container {
   padding: 20px 40px;
