@@ -91,7 +91,7 @@ export default {
           { key: "passed", name: "状态", width: 80 },
           { key: "read_type", name: "阅读权限", width: 120 },
           { key: "create_time", name: "发表时间", minWidth: 120 },
-          { key: "operations", name: "操作", width: 135 }
+          { key: "operations", name: "操作", width: 205 }
         ],
         total: 0,
         data: []
@@ -150,13 +150,6 @@ export default {
           return this.$message("请先选择文章");
         }
       }
-      // utils.ajax.call(this, '/passedArticle', { ids: arr.map(o => o.id).join(','), passed: pass }, (obj, err) => {
-      //   if (!err) {
-      //     arr.forEach(row => {
-      //       row.passed = obj.passed
-      //     })
-      //   }
-      // })
     },
     selectable(row) {
       let user = this.userInfo;
@@ -187,6 +180,7 @@ export default {
             ? true
             : this.grade.deleteArticle;
       }
+      dis = false;
       return h(
         "el-button",
         {
@@ -225,8 +219,9 @@ export default {
         return str === 1 ? "通过" : this.createButton(h, row, key, "审核");
       } else if (key === "operations") {
         return h("div", [
+          this.createButton(h, row, "show", "预览"),
           this.createButton(h, row, "edit", "编辑"),
-          this.createButton(h, row, "delete", "删除")
+          this.createButton(h, row, "delete", "删除"),
         ]);
       } else if (key === "read_type") {
         // str = common.user_type[str] || '未知'
@@ -236,14 +231,20 @@ export default {
     // 处理列、按钮点击
     healColumnClick(code, row) {
       if (code === "edit") {
-        this.$router.push("/article/edit/" + row.id);
+        this.$store.dispatch('article/getDetail',row._id);
+        this.$router.replace("/articleAdd");
       } else if (code === "view") {
         this.$refs.view.open(!0);
-        this.getActiveContent(row.id);
+        this.getActiveContent(row._id);
       } else if (code === "passed") {
         this.passedArticle([row], row.passed === 1 ? 0 : 1);
       } else if (code === "delete") {
         this.deleteArticle([row]);
+      }
+       else if (code === "show") {
+         console.log('row._id ', row._id);
+         this.$store.dispatch('article/getDetail',row._id);
+        this.$router.replace("/articleDetail?article_id=" + row._id);
       }
     },
     getActiveContent(id) {

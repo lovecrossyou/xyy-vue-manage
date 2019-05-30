@@ -33,6 +33,7 @@ const factoryList = r => require.ensure([], () => r(require('@/page/factoryList'
 const articleList = r => require.ensure([], () => r(require('@/page/article/list')), 'articleList');
 const articleAdd = r => require.ensure([], () => r(require('@/page/article/add')), 'articleAdd');
 const articleSort = r => require.ensure([], () => r(require('@/page/article/sort')), 'articleSort');
+const articleDetail = r => require.ensure([], () => r(require('@/page/article/detail')), 'articleDetail');
 
 const routes = [
 	{
@@ -129,6 +130,10 @@ const routes = [
 			path:'/articleAdd',
 			component:articleAdd,
 			meta: ['文章管理', '添加文章'],
+		},{
+			path:'/articleDetail',
+			component:articleDetail,
+			meta: ['文章管理', '文章详情'],
 		},{
 			path:'/articleSort',
 			component:articleSort,

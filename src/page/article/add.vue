@@ -3,7 +3,13 @@
     <head-top></head-top>
     <el-row style="margin-top: 20px;">
       <el-col :span="12" :offset="1">
-        <el-form ref="articleForm" :model="formData" :rules="rules" label-width="110px" class="form">
+        <el-form
+          ref="articleForm"
+          :model="formData"
+          :rules="rules"
+          label-width="110px"
+          class="form"
+        >
           <el-form-item label="文章标题" prop="title">
             <el-input v-model="formData.title"></el-input>
           </el-form-item>
@@ -17,7 +23,7 @@
               v-model="sort_id"
               change-on-select
               :props="defaultProps"
-            ></el-cascader> -->
+            ></el-cascader>-->
           </el-form-item>
           <el-form-item label="文章概要" prop="description">
             <el-input type="textarea" v-model="formData.description"></el-input>
@@ -30,7 +36,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="来源">
-            <el-input v-model="formData.source" ></el-input>
+            <el-input v-model="formData.source"></el-input>
           </el-form-item>
           <el-form-item label="封面图片">
             <el-upload
@@ -70,7 +76,12 @@ import { quillEditor, Quill } from "vue-quill-editor";
 import { container, ImageExtend, QuillWatch } from "quill-image-extend-module";
 import ImageResize from "quill-image-resize-module";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { addArticle } from "@/api/getData";
+import { addArticle, updateArticle } from "@/api/getData";
+import { mapState, mapActions } from "vuex";
+
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 Quill.register("modules/ImageExtend", ImageExtend);
 // use resize module
@@ -111,16 +122,6 @@ export default {
       },
       sort_id: [],
       sort_data: [],
-      formData: {
-        id: 0,
-        title: "",
-        sort_id: "",
-        description: "",
-        user_name: "猪猪侠",
-        pic: "",
-        read_type: 4,
-        content: ""
-      },
       rules: {
         sort_id: { required: true, message: "分类不能为空" },
         title: [
@@ -174,8 +175,12 @@ export default {
     quillEditor
   },
   computed: {
+    ...mapState("article", ["articleInfo"]),
     editor() {
       return this.$refs.myQuillEditor.quill;
+    },
+    formData() {
+      return this.articleInfo;
     }
   },
   methods: {
@@ -187,9 +192,13 @@ export default {
     },
     async submit() {
       console.log(this.formData);
-      this.$refs['articleForm'].validate(async valid => {
+      this.$refs["articleForm"].validate(async valid => {
         if (valid) {
-          const res = await addArticle(this.formData);
+          if (this.formData._id) {
+            await updateArticle(this.formData);
+          } else {
+            await addArticle(this.formData);
+          }
           this.$message.success("提交成功！");
         } else {
           this.$notify.error({
@@ -199,8 +208,6 @@ export default {
           });
         }
       });
-
-      
     },
     successUpload(data) {
       this.data.pic = formData.filename;
