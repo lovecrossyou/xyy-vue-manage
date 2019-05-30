@@ -192,6 +192,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('article',[]),
     onProgress(p) {
       this.upProgress = p;
     },

@@ -1,4 +1,4 @@
-import { detailArticle } from '@/api/getData'
+import { detailArticle, listArticle } from '@/api/getData'
 
 const state = {
         articlelist: [],
@@ -21,6 +21,11 @@ const actions = {
                 const articleInfo = await detailArticle(article_id);
                 commit('save', articleInfo.data);
         },
+
+        async list({ commit }) {
+                const listInfo = await listArticle(article_id);
+                commit('savelist', listInfo.data);
+        }
 }
 
 const mutations = {
@@ -29,6 +34,9 @@ const mutations = {
         },
         saveid(state, payload) {
                 state.article_id = payload;
+        },
+        savelist(state, payload) {
+                state.articlelist = payload;
         }
 }
 

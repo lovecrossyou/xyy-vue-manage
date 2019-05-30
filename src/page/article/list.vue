@@ -22,7 +22,7 @@
         stripe
         border
         style="width:100%;margin-top:10px"
-        :data="table_data.data"
+        :data="articlelist"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" :selectable="selectable" width="55"></el-table-column>
@@ -49,7 +49,8 @@
 </template>
 <script type="text/javascript">
 import headTop from "@/components/headTop";
-import { listArticle } from "@/api/getData";
+// import { listArticle } from "@/api/getData";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "list",
@@ -113,7 +114,12 @@ export default {
   components: {
     headTop
   },
+  computed:{
+    ...mapState('article',['articlelist'])
+  },
   methods: {
+    ...mapActions('article',['list']),
+    
     onSubmit() {
       console.log("submit!");
     },
@@ -291,8 +297,8 @@ export default {
     async ajaxData() {
       let p = this.sort_id;
       this.search_data.sort_id = p.length ? p.slice(-1)[0] : "";
-      const obj = await listArticle();
-      this.table_data.data = obj.data;
+      await this.list();
+      // this.table_data.data = obj.data;
       // utils.ajax.call(this, "/listArticle", this.search_data, (obj, err) => {
       //   if (!err) {
       //     this.table_data.data = obj.data;
@@ -315,24 +321,24 @@ export default {
   },
   mounted() {
     this.ajaxData();
-    utils.ajax.call(this, "/listSort", {}, (data, err) => {
-      if (!err) {
-        let arr = data.data;
-        arr.sort((a, b) => (a.parent_id > b.parent_id ? 1 : -1));
-        for (let i = arr.length; i--; ) {
-          if (arr[i].parent_id > 0) {
-            let obj = arr.pop();
-            arr.forEach(item => {
-              if (item.id === obj.parent_id) {
-                item.children = item.children || [];
-                item.children.push(obj);
-              }
-            });
-          }
-        }
-        this.sort_data = arr;
-      }
-    });
+    // utils.ajax.call(this, "/listSort", {}, (data, err) => {
+    //   if (!err) {
+    //     let arr = data.data;
+    //     arr.sort((a, b) => (a.parent_id > b.parent_id ? 1 : -1));
+    //     for (let i = arr.length; i--; ) {
+    //       if (arr[i].parent_id > 0) {
+    //         let obj = arr.pop();
+    //         arr.forEach(item => {
+    //           if (item.id === obj.parent_id) {
+    //             item.children = item.children || [];
+    //             item.children.push(obj);
+    //           }
+    //         });
+    //       }
+    //     }
+    //     this.sort_data = arr;
+    //   }
+    // });
   }
   // mixins: [common.mixin]
 };
