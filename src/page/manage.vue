@@ -30,6 +30,8 @@
               <i class="el-icon-document"></i>商品管理
             </template>
             <el-menu-item index="foodList">商品列表</el-menu-item>
+            <el-menu-item index="foodList">商品分类</el-menu-item>
+            <el-menu-item index="foodList">品牌管理</el-menu-item>
           </el-submenu>
 
           <el-submenu index="10">
@@ -46,6 +48,18 @@
             </template>
             <el-menu-item index="factoryList">厂家列表</el-menu-item>
             <el-menu-item index="addFactory">添加厂家</el-menu-item>
+          </el-submenu>
+
+          <el-submenu index="12">
+            <template slot="title">
+              <i class="el-icon-document"></i>营销管理
+            </template>
+            <el-menu-item index="bannerList">秒杀活动列表</el-menu-item>
+            <el-menu-item index="bannerList">优惠券列表</el-menu-item>
+            <el-menu-item index="bannerList">品牌推荐</el-menu-item>
+            <el-menu-item index="bannerList">新品推荐</el-menu-item>
+            <el-menu-item index="bannerList">推荐</el-menu-item>
+            <el-menu-item index="bannerList">广告列表</el-menu-item>
           </el-submenu>
 
            <el-submenu index="3">
