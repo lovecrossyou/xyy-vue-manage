@@ -118,7 +118,7 @@ export default {
     ...mapState('article',['articlelist'])
   },
   methods: {
-    ...mapActions('article',['list']),
+    ...mapActions('article',['list','del']),
     
     onSubmit() {
       console.log("submit!");
@@ -142,6 +142,8 @@ export default {
         }
       )
         .then(() => {
+          const article = arr[0];
+          this.del(article._id);
           // utils.ajax.call(this, '/deleteArticle', { ids: arr.map(o => o.id).join(',') }, (d, err) => {
           //   !err && this.ajaxData()
           // })
@@ -295,8 +297,8 @@ export default {
     },
     // ajax请求列表数据
     async ajaxData() {
-      let p = this.sort_id;
-      this.search_data.sort_id = p.length ? p.slice(-1)[0] : "";
+      // let p = this.sort_id;
+      // this.search_data.sort_id = p.length ? p.slice(-1)[0] : "";
       await this.list();
       // this.table_data.data = obj.data;
       // utils.ajax.call(this, "/listArticle", this.search_data, (obj, err) => {

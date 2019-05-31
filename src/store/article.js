@@ -1,4 +1,4 @@
-import { detailArticle, listArticle } from '@/api/getData'
+import { detailArticle, listArticle, delArticle } from '@/api/getData'
 
 const state = {
         articlelist: [],
@@ -23,8 +23,12 @@ const actions = {
         },
 
         async list({ commit }) {
-                const listInfo = await listArticle(article_id);
+                const listInfo = await listArticle();
                 commit('savelist', listInfo.data);
+        },
+        async del({dispatch, commit }, article_id){
+                const res = await delArticle(article_id);
+                dispatch('list');
         }
 }
 

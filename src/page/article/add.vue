@@ -2,8 +2,8 @@
   <div>
     <head-top></head-top>
     <div class="main">
-      <el-collapse v-model="activeNames">
-      <el-collapse-item title="基本设置" name="1">
+      <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse-item :title="collapseTitle" name="1">
         <el-row style="margin-top: 20px;">
           <el-col :span="12" :offset="1">
             <el-form
@@ -175,7 +175,8 @@ export default {
         children: "children",
         label: "sort_name",
         value: "id"
-      }
+      },
+      collapseTitle:'点击收起'
     };
   },
   components: {
@@ -195,6 +196,14 @@ export default {
     ...mapActions('article',[]),
     onProgress(p) {
       this.upProgress = p;
+    },
+    handleChange(list) {
+        if(list.length >0){
+          this.collapseTitle = '收起';
+        }
+        else{
+          this.collapseTitle = '展开更多设置';
+        }
     },
     onEditorReady(editor) {
       console.log("editor ready!", editor);
@@ -258,7 +267,7 @@ export default {
   margin-bottom: 60px;
 }
 .editer {
-  height: 400px;
+  height: 800px;
 }
 .submit_btn {
   text-align: center;
@@ -326,6 +335,8 @@ export default {
   .avatar-uploader .el-upload:hover {
     border-color: #409eff;
   }
+
+  
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -338,6 +349,7 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+    overflow: hidden;
   }
 }
 </style>
