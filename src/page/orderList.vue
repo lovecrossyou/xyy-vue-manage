@@ -31,15 +31,15 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="订单 ID" prop="id"></el-table-column>
-        <el-table-column label="总价格(元)" prop="total_amount"></el-table-column>
+        <el-table-column label="订单 ID" prop="id" align="center"></el-table-column>
+        <el-table-column label="总价格(元)" prop="total_amount" align="center"></el-table-column>
         <el-table-column label="下单时间" prop="formatted_created_at"></el-table-column>
 
-        <el-table-column label="用户账号" prop="status"></el-table-column>
-        <el-table-column label="订单金额" prop="status"></el-table-column>
-        <el-table-column label="支付方式" prop="status"></el-table-column>
-        <el-table-column label="订单来源" prop="status"></el-table-column>
-        <el-table-column label="订单状态" prop="status"></el-table-column>
+        <el-table-column label="用户账号" prop="status" align="center"></el-table-column>
+        <el-table-column label="订单金额" prop="status" align="center"></el-table-column>
+        <el-table-column label="支付方式" prop="status" align="center"></el-table-column>
+        <el-table-column label="订单来源" prop="status" align="center"></el-table-column>
+        <el-table-column label="订单状态" prop="status" align="center"></el-table-column>
 
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
