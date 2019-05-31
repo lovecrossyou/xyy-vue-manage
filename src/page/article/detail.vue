@@ -33,6 +33,7 @@ export default {
 <style >
 .main {
   padding: 20px 40px;
+  width:80%;
 }
 .title {
   font-size: 30px;

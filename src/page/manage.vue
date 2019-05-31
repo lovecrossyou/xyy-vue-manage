@@ -71,7 +71,7 @@
 
           <el-submenu index="3">
             <template slot="title">
-              <i class="el-icon-document"></i>文章管理
+              <i class="el-icon-document"></i>新闻资讯
             </template>
             <el-menu-item index="articleSort">分类管理</el-menu-item>
             <el-menu-item index="articleList">文章列表</el-menu-item>
