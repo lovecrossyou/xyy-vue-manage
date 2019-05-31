@@ -113,18 +113,10 @@ export default {
   },
   mounted() {},
   methods: {
-    handleDeliveryOrder(index, row) {
-      
-    },
-    handleViewOrder(index, row){
-
-    },
-    handleViewLogistics(index, row) {
-      
-    },
-    handleDeleteOrder(index, row){
-
-    },
+    handleDeliveryOrder(index, row) {},
+    handleViewOrder(index, row) {},
+    handleViewLogistics(index, row) {},
+    handleDeleteOrder(index, row) {},
     async initData() {
       try {
         const countData = await getOrderCount({
