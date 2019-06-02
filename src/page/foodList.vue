@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import headTop from "../components/headTop";
+import headTop from "@/components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
 import {
   getFoods,

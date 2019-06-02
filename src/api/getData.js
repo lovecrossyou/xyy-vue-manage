@@ -266,3 +266,6 @@ export const updateArticle = data=> fetch('/article/update',data,'POST');
 export const listArticle = data=> fetch('/article/list');
 export const detailArticle = article_id=> fetch('/article/detail?article_id='+article_id);
 export const delArticle = article_id=> fetch('/article/delete/'+article_id,'','DELETE');
+
+
+export const addCategoryM = data=> fetch('/category_m/add',data,'POST');
