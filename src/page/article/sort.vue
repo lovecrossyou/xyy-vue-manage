@@ -57,7 +57,7 @@
 </template>
 <script type="text/javascript">
 import headTop from "@/components/headTop";
-import { addCategoryM } from "@/api/getData";
+import { addCategoryM, listCategoryM, delCategoryM } from "@/api/getData";
 
 // 0 水质监测 1 新闻 2 文章 3 教程
 const sort_type = {
@@ -81,13 +81,14 @@ export default {
       loading: false,
       filterText: "",
       sort_type,
-      parent_id: [],
+      parent_id: ["xx"],
       parent_store: null,
       parent_data: null,
       form: {
         id: 0,
         sort_name: "",
-        type: 0
+        type: 0,
+        name: ""
       },
       rules: {
         sort_name: {
@@ -108,7 +109,8 @@ export default {
         children: "children",
         label: "sort_name",
         value: "id"
-      }
+      },
+      vv: "xxx"
     };
   },
   computed: {
@@ -120,25 +122,7 @@ export default {
     headTop
   },
   mounted() {
-    // utils.ajax.call(this, '/listSort', {}, (data, err) => {
-    //   if (!err) {
-    //     let arr = data.data
-    //     arr.sort((a, b) => a.parent_id > b.parent_id ? 1 : -1)
-    //     for (let i = arr.length; i--;) {
-    //       arr[i].disabled = arr[i].counts > 0
-    //       if (arr[i].parent_id > 0) {
-    //         let obj = arr.pop()
-    //         arr.forEach(item => {
-    //           if (item.id === obj.parent_id) {
-    //             item.children = item.children || []
-    //             item.children.push(obj)
-    //           }
-    //         })
-    //       }
-    //     }
-    //     this.data = arr
-    //   }
-    // })
+    this.list();
   },
   watch: {
     filterText(val) {
@@ -146,6 +130,17 @@ export default {
     }
   },
   methods: {
+    async list() {
+      const res = await listCategoryM();
+      let arr = res.data;
+      arr.forEach(item => {
+        item.sort_name = item.name;
+        item.parent_id = item.parentId;
+        item.disabled = false;
+      });
+      console.log("arr ### ", arr);
+      this.data = arr;
+    },
     async batchDelete() {
       let v = this.$refs.tree.getCheckedKeys();
       if (v.length) {
@@ -176,13 +171,17 @@ export default {
         if (v) {
           this.visible = true;
           this.loading = true;
-          let p = this.parent_id;
-          this.form.parent_id = p.length ? p.slice(-1)[0] : 0;
+          let parent_id = this.parent_data ? this.parent_data._id : 0;
+          this.form.parentId = parent_id;
+          console.log("this.parent_data", this.parent_data);
+          console.log("this.form ", this.form);
+          // return;
           const res = await addCategoryM(this.form);
           this.$message({
             message: res.message,
             type: "success"
           });
+          this.visible = false;
         }
       });
     },
@@ -202,7 +201,15 @@ export default {
       if (!value) return true;
       return data.sort_name.indexOf(value) !== -1;
     },
-    headleClick(icon, data, store) {
+    async del(categoryid) {
+      const res = await delCategoryM(categoryid);
+      this.$message({
+        message: res.message,
+        type: "success"
+      });
+      this.list();
+    },
+    async headleClick(icon, data, store) {
       if (icon === "delete") {
         this.$confirm("确定要删除此分类吗？", "系统提醒", {
           confirmButtonText: "确定",
@@ -210,6 +217,8 @@ export default {
           type: "warning"
         })
           .then(() => {
+            this.del(data._id);
+
             // utils.ajax.call(this, '/deleteSort', { id: data.id }, (d, err) => {
             //   if (!err) {
             //     store.remove(data)
@@ -233,6 +242,7 @@ export default {
         this.parent_store = store;
         this.parent_data = data;
         this.visible = true;
+        console.log("parent_data ### ", data);
       }
     },
     renderContent(h, { node, data, store }) {
@@ -242,7 +252,12 @@ export default {
             ? data.disabled || this.grade.deleteSort
             : this.grade.updateSort;
         return h("el-button", {
-          props: { size: "mini", type, icon: "el-icon-" + icon, disabled: dis },
+          props: {
+            size: "mini",
+            type,
+            icon: "el-icon-" + icon,
+            disabled: false
+          },
           on: {
             click: () => {
               let p = node.parent;
@@ -252,6 +267,7 @@ export default {
                 p = p.parent;
               }
               this.headleClick(icon, data, store);
+              console.log("data  p ### ", p);
             }
           }
         });
@@ -268,8 +284,8 @@ export default {
                   color: "#999",
                   marginLeft: "10px"
                 }
-              },
-              common.sort_type[node.data.sort_type]
+              }
+              // common.sort_type[node.data.sort_type]
             )
           ]
         ]),
