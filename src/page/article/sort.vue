@@ -133,12 +133,20 @@ export default {
     async list() {
       const res = await listCategoryM();
       let arr = res.data;
-      arr.forEach(item => {
-        item.sort_name = item.name;
-        item.parent_id = item.parentId;
-        item.disabled = false;
-      });
-      console.log("arr ### ", arr);
+      for (let i = arr.length; i--; ) {
+        let obj = arr[i];
+        arr.forEach(item => {
+          item.sort_name = item.name;
+          item.parent_id = item.parentId;
+          // item.disabled = false;
+          // console.log(' item ', item);
+          // if (item.parent_id === obj._id) {
+          //   item.children = item.children || [];
+          //   item.children.push(obj);
+          // }
+        });
+      }
+      // console.log("arr ### ", arr);
       this.data = arr;
     },
     async batchDelete() {
@@ -173,15 +181,14 @@ export default {
           this.loading = true;
           let parent_id = this.parent_data ? this.parent_data._id : 0;
           this.form.parentId = parent_id;
-          console.log("this.parent_data", this.parent_data);
-          console.log("this.form ", this.form);
-          // return;
           const res = await addCategoryM(this.form);
           this.$message({
             message: res.message,
             type: "success"
           });
           this.visible = false;
+          this.loading = false;
+          this.list();
         }
       });
     },
@@ -208,6 +215,7 @@ export default {
         type: "success"
       });
       this.list();
+      
     },
     async headleClick(icon, data, store) {
       if (icon === "delete") {
