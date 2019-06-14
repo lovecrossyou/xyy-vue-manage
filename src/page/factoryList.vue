@@ -42,6 +42,14 @@
         <el-table-column label="厂家名称" prop="name"></el-table-column>
         <el-table-column label="地址" prop="address"></el-table-column>
         <el-table-column label="介绍" prop="promotion_info"></el-table-column>
+        <el-table-column label="审核状态" prop="status">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.status === 0 ? 'warning' : scope.row.status===1? 'primary':'danger' "
+              disable-transitions
+            >{{scope.row.status===0?'待审核': scope.row.status===1?'审核通过':'审核驳回'}}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -59,7 +67,7 @@
           :total="count"
         ></el-pagination>
       </div>
-      <el-dialog title="修改厂家信息" :visible.sync="dialogFormVisible">
+      <el-dialog title="审核厂家信息" :visible.sync="dialogFormVisible">
         <el-form :model="selectTable">
           <el-form-item label="厂家名称" label-width="100px">
             <el-input v-model="selectTable.name" auto-complete="off"></el-input>
@@ -94,8 +102,10 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
+          <!-- <el-button type="primary" @click="updateFactory">确 定</el-button> -->
+          <el-button type="primary" @click="updateShop">通 过</el-button>
+          <el-button type="danger" @click="updateShop">驳 回</el-button>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updateFactory">确 定</el-button>
         </div>
       </el-dialog>
     </div>

@@ -3,8 +3,8 @@
     <head-top></head-top>
     <div class="search_container">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="店铺名称">
-          <el-input v-model="formInline.name" placeholder="请输入店铺名称"></el-input>
+        <el-form-item label="水站名称">
+          <el-input v-model="formInline.name" placeholder="请输入水站名称"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="searchShop">模糊查询</el-button>
@@ -17,16 +17,16 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="店铺名称">
+              <el-form-item label="水站名称">
                 <span>{{ props.row.name }}</span>
               </el-form-item>
-              <el-form-item label="店铺地址">
+              <el-form-item label="水站地址">
                 <span>{{ props.row.address }}</span>
               </el-form-item>
-              <el-form-item label="店铺介绍">
+              <el-form-item label="水站介绍">
                 <span>{{ props.row.description }}</span>
               </el-form-item>
-              <el-form-item label="店铺 ID">
+              <el-form-item label="水站 ID">
                 <span>{{ props.row.id }}</span>
               </el-form-item>
               <el-form-item label="联系电话">
@@ -44,14 +44,24 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="店铺名称" prop="name"></el-table-column>
-        <el-table-column label="店铺地址" prop="address"></el-table-column>
-        <el-table-column label="店铺介绍" prop="description"></el-table-column>
-        <el-table-column label="操作" width="260">
+        <el-table-column label="水站名称" prop="name"></el-table-column>
+        <el-table-column label="水站地址" prop="address"></el-table-column>
+        <el-table-column label="水站介绍" prop="description"></el-table-column>
+        <el-table-column label="审核状态" prop="status">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="Success" @click="addFood(scope.$index, scope.row)">添加食品</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-tag
+              :type="scope.row.status === 0 ? 'warning' : scope.row.status===1? 'primary':'danger' "
+              disable-transitions
+            >{{scope.row.status===0?'待审核': scope.row.status===1?'审核通过':'审核驳回'}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="360">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+            <el-button v-if="scope.row.status===0" size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">审核通过</el-button>
+            <el-button v-if="scope.row.status===0" size="mini" type="danger" @click="handleEdit(scope.$index, scope.row)">审核驳回</el-button>
+            <!-- <el-button size="mini" type="Success" @click="addFood(scope.$index sope.row)">添加食品</el-button> -->
+            <el-button size="mini" type="warning" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,9 +75,9 @@
           :total="count"
         ></el-pagination>
       </div>
-      <el-dialog title="修改店铺信息" :visible.sync="dialogFormVisible">
+      <el-dialog title="审查水站信息" :visible.sync="dialogFormVisible">
         <el-form :model="selectTable">
-          <el-form-item label="店铺名称" label-width="100px">
+          <el-form-item label="水站名称" label-width="100px">
             <el-input v-model="selectTable.name" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="详细地址" label-width="100px">
@@ -80,14 +90,50 @@
             ></el-autocomplete>
             <span>当前城市：{{city.name}}</span>
           </el-form-item>
-          <el-form-item label="店铺介绍" label-width="100px">
+          <el-form-item label="水站介绍" label-width="100px">
             <el-input v-model="selectTable.description"></el-input>
           </el-form-item>
           <el-form-item label="联系电话" label-width="100px">
             <el-input v-model="selectTable.phone"></el-input>
           </el-form-item>
-          <el-form-item label="店铺分类" label-width="100px">
+          <el-form-item label="水站分类" label-width="100px">
             <el-cascader :options="categoryOptions" v-model="selectedCategory" change-on-select></el-cascader>
+          </el-form-item>
+          <el-form-item label="商铺图片" label-width="100px">
+            <el-upload
+              class="avatar-uploader"
+              :action="baseUrl + '/v1/addimg/shop'"
+              :show-file-list="false"
+              :on-success="handleServiceAvatarScucess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="selectTable.image_path" :src="selectTable.image_path" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="商铺图片" label-width="100px">
+            <el-upload
+              class="avatar-uploader"
+              :action="baseUrl + '/v1/addimg/shop'"
+              :show-file-list="false"
+              :on-success="handleServiceAvatarScucess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="selectTable.image_path" :src="selectTable.image_path" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="商铺图片" label-width="100px">
+            <el-upload
+              class="avatar-uploader"
+              :action="baseUrl + '/v1/addimg/shop'"
+              :show-file-list="false"
+              :on-success="handleServiceAvatarScucess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="selectTable.image_path" :src="selectTable.image_path" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-form-item>
           <el-form-item label="商铺图片" label-width="100px">
             <el-upload
@@ -103,8 +149,9 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="updateShop">通 过</el-button>
+          <el-button type="danger" @click="updateShop">驳 回</el-button>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updateShop">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -153,19 +200,24 @@ export default {
     headTop
   },
   computed: {
-    ...mapState("shop", ["shoplist"])
+    ...mapState("shop", ["shoplist"]),
+    statusText(status) {
+      if (status === 0) return "待审核";
+      else if (status === -1) return "已驳回";
+      return "审核通过";
+    }
   },
   methods: {
     ...mapActions("shop", ["getResturants"]),
     searchShop() {
       const { latitude, longitude } = this.city;
-        const params = {
-          latitude,
-          longitude,
-          offset: this.offset,
-          limit: this.limit,
-          keyword: this.formInline.name
-        };
+      const params = {
+        latitude,
+        longitude,
+        offset: this.offset,
+        limit: this.limit,
+        keyword: this.formInline.name
+      };
       this.getResturants(params);
     },
     async initData() {
@@ -185,7 +237,7 @@ export default {
           limit: this.limit,
           keyword: this.formInline.name
         };
-        this.$store.dispatch('shop/getResturants',params);
+        this.$store.dispatch("shop/getResturants", params);
         // this.getResturants(params);
       } catch (err) {
         console.log("获取数据失败", err);
@@ -235,8 +287,13 @@ export default {
       }
     },
     addFood(index, row) {
-      this.$store.commit('shop/saveid',row.id);
-      this.$router.push({ path: "addGoods", query: { restaurant_id: row.id } });
+      this.$store.commit("shop/saveid", row.id);
+      this.$router.push({
+        path: "addGoods",
+        query: {
+          restaurant_id: row.id
+        }
+      });
     },
     async handleDelete(index, row) {
       try {
@@ -244,7 +301,7 @@ export default {
         if (res.status == 1) {
           this.$message({
             type: "success",
-            message: "删除店铺成功"
+            message: "删除水站成功"
           });
           this.shoplist.splice(index, 1);
         } else {
@@ -255,7 +312,7 @@ export default {
           type: "error",
           message: err.message
         });
-        console.log("删除店铺失败");
+        console.log("删除水站失败");
       }
     },
     async querySearchAsync(queryString, cb) {
@@ -276,7 +333,11 @@ export default {
     },
     addressSelect(vale) {
       const { address, latitude, longitude } = vale;
-      this.address = { address, latitude, longitude };
+      this.address = {
+        address,
+        latitude,
+        longitude
+      };
     },
     handleServiceAvatarScucess(res, file) {
       if (res.status == 1) {
@@ -307,7 +368,7 @@ export default {
         if (res.status == 1) {
           this.$message({
             type: "success",
-            message: "更新店铺信息成功"
+            message: "更新水站信息成功"
           });
           this.getResturants();
         } else {
@@ -330,15 +391,18 @@ export default {
 .demo-table-expand {
   font-size: 0;
 }
+
 .demo-table-expand label {
   width: 90px;
   color: #99a9bf;
 }
+
 .demo-table-expand .el-form-item {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
 }
+
 .search_container {
   padding: 20px 20px 0 20px;
 }
@@ -346,11 +410,13 @@ export default {
 .table_container {
   padding: 0 20px 20px 20px;
 }
+
 .Pagination {
   display: flex;
   justify-content: flex-start;
   margin-top: 8px;
 }
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -358,9 +424,11 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #20a0ff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -369,6 +437,7 @@ export default {
   line-height: 120px;
   text-align: center;
 }
+
 .avatar {
   width: 120px;
   height: 120px;

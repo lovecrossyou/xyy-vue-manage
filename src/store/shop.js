@@ -20,6 +20,7 @@ const actions = {
                         tableData.rating = item.rating;
                         tableData.recent_order_num = item.recent_order_num;
                         tableData.category = item.category;
+                        tableData.status = item.status;
                         tableData.image_path = item.image_path;
                         shoplist.push(tableData);
                 });
