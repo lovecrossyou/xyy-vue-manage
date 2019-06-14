@@ -1,98 +1,165 @@
 <template>
   <div>
     <head-top></head-top>
-    <el-row style="margin-top: 20px;">
-      <el-col :span="12" :offset="4">
-        <el-form
-          :model="formData"
-          :rules="rules"
-          ref="formData"
-          label-width="110px"
-          class="demo-formData"
-        >
-          <el-form-item label="厂家名称" prop="name">
-            <el-input v-model="formData.name"></el-input>
-          </el-form-item>
-          <el-form-item label="详细地址" prop="address">
-            <el-autocomplete
-              v-model="formData.address"
-              :fetch-suggestions="querySearchAsync"
-              placeholder="请输入地址"
-              style="width: 100%;"
-              @select="addressSelect"
-            ></el-autocomplete>
-            <span>当前城市：{{city.name}}</span>
-          </el-form-item>
-          <el-form-item label="联系电话" prop="phone">
-            <el-input v-model.number="formData.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="品牌" prop="brand">
-            <el-input v-model="formData.brand"></el-input>
-          </el-form-item>
-          <el-form-item label="厂家介绍">
-            <el-input type="textarea" :rows="2" placeholder="请输入介绍信息" v-model="formData.promotion_info"></el-input>
-          </el-form-item>
-          <el-form-item label="上传厂家头像">
-            <el-upload
-              class="avatar-uploader"
-              :action="baseUrl + '/v1/addimg/shop'"
-              :show-file-list="false"
-              :on-success="handleShopAvatarScucess"
-              :before-upload="beforeAvatarUpload"
-            >
-              <img
-                v-if="formData.image_path"
-                :src="baseImgPath + formData.image_path"
-                class="avatar"
+    <el-card class="box-card">
+      <el-row style="margin-top: 20px;" border>
+        <el-col :span="12" :offset="4">
+          <el-divider>水厂基本信息</el-divider>
+          <el-form
+            :model="formData"
+            :rules="rules"
+            ref="formData"
+            label-width="110px"
+            class="demo-formData"
+          >
+            <el-form-item label="厂家名称" prop="name">
+              <el-input v-model="formData.name"></el-input>
+            </el-form-item>
+            <el-form-item label="详细地址" prop="address">
+              <el-autocomplete
+                v-model="formData.address"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入地址"
+                style="width: 100%;"
+                @select="addressSelect"
+              ></el-autocomplete>
+              <span>当前城市：{{city.name}}</span>
+            </el-form-item>
+            <el-form-item label="联系电话" prop="phone">
+              <el-input v-model.number="formData.phone"></el-input>
+            </el-form-item>
+            <el-form-item label="品牌" prop="brand">
+              <el-input v-model="formData.brand"></el-input>
+            </el-form-item>
+            <el-form-item label="厂家介绍">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入介绍信息"
+                v-model="formData.promotion_info"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="上传厂家头像">
+              <el-upload
+                class="avatar-uploader"
+                :action="baseUrl + '/v1/addimg/shop'"
+                :show-file-list="false"
+                :on-success="handleShopAvatarScucess"
+                :before-upload="beforeAvatarUpload"
               >
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="上传营业执照">
-            <el-upload
-              class="avatar-uploader"
-              :action="baseUrl + '/v1/addimg/shop'"
-              :show-file-list="false"
-              :on-success="handleBusinessAvatarScucess"
-              :before-upload="beforeAvatarUpload"
-            >
-              <img
-                v-if="formData.business_license_image"
-                :src="baseImgPath + formData.business_license_image"
-                class="avatar"
+                <img
+                  v-if="formData.image_path"
+                  :src="baseImgPath + formData.image_path"
+                  class="avatar"
+                >
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="上传营业执照">
+              <el-upload
+                class="avatar-uploader"
+                :action="baseUrl + '/v1/addimg/shop'"
+                :show-file-list="false"
+                :on-success="handleBusinessAvatarScucess"
+                :before-upload="beforeAvatarUpload"
               >
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="上传食品经营许可证">
-            <el-upload
-              class="avatar-uploader"
-              :action="baseUrl + '/v1/addimg/shop'"
-              :show-file-list="false"
-              :on-success="handleServiceAvatarScucess"
-              :before-upload="beforeAvatarUpload"
-            >
-              <img
-                v-if="formData.catering_service_license_image"
-                :src="baseImgPath + formData.catering_service_license_image"
-                class="avatar"
-              >
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
+                <img
+                  v-if="formData.business_license_image"
+                  :src="baseImgPath + formData.business_license_image"
+                  class="avatar"
+                >
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+            <el-divider>供货商资质信息</el-divider>
+            <div class="supplier-border">
+              <el-form-item label="桶">
+                <el-upload
+                  class="avatar-uploader"
+                  :action="baseUrl + '/v1/addimg/shop'"
+                  :show-file-list="false"
+                  :on-success="handleServiceAvatarScucess"
+                  :before-upload="beforeAvatarUpload"
+                >
+                  <img
+                    v-if="formData.catering_service_license_image"
+                    :src="baseImgPath + formData.catering_service_license_image"
+                    class="avatar"
+                  >
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
 
-          <el-form-item class="button_submit">
-            <el-button type="primary" @click="submitForm('formData')">立即创建</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
+              <el-form-item label="标签">
+                <el-upload
+                  class="avatar-uploader"
+                  :action="baseUrl + '/v1/addimg/shop'"
+                  :show-file-list="false"
+                  :on-success="handleServiceAvatarScucess"
+                  :before-upload="beforeAvatarUpload"
+                >
+                  <img
+                    v-if="formData.catering_service_license_image"
+                    :src="baseImgPath + formData.catering_service_license_image"
+                    class="avatar"
+                  >
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+
+              <el-form-item label="桶盖">
+                <el-upload
+                  class="avatar-uploader"
+                  :action="baseUrl + '/v1/addimg/shop'"
+                  :show-file-list="false"
+                  :on-success="handleServiceAvatarScucess"
+                  :before-upload="beforeAvatarUpload"
+                >
+                  <img
+                    v-if="formData.catering_service_license_image"
+                    :src="baseImgPath + formData.catering_service_license_image"
+                    class="avatar"
+                  >
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+
+              <el-form-item label="包装袋">
+                <el-upload
+                  class="avatar-uploader"
+                  :action="baseUrl + '/v1/addimg/shop'"
+                  :show-file-list="false"
+                  :on-success="handleServiceAvatarScucess"
+                  :before-upload="beforeAvatarUpload"
+                >
+                  <img
+                    v-if="formData.catering_service_license_image"
+                    :src="baseImgPath + formData.catering_service_license_image"
+                    class="avatar"
+                  >
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+            </div>
+
+            <el-form-item class="button_submit">
+              <el-button type="primary" @click="submitForm('formData')">立即创建</el-button>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
 <script>
 import headTop from "@/components/headTop";
-import { cityGuess, addFactory, searchplace, foodCategory } from "@/api/getData";
+import {
+  cityGuess,
+  addFactory,
+  searchplace,
+  foodCategory
+} from "@/api/getData";
 import { baseUrl, baseImgPath } from "@/config/env";
 export default {
   data() {
@@ -312,5 +379,19 @@ export default {
 
 .el-table .positive-row {
   background: #e2f0e4;
+}
+
+.supplier-border {
+  // border: solid 1px #e1e1e1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-top: 25px;
+  box-sizing: border-box;
+}
+
+.box-card {
+  width: 80%;
+  margin-left: 40px;
 }
 </style>
