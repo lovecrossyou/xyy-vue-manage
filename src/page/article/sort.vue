@@ -12,18 +12,12 @@
         </el-col>
       </el-row>
     </div>
-    <el-tree
-      class="filter-tree"
-      :data="data"
-      node-key="id"
-      :props="defaultProps"
-      default-expand-all
-      :show-checkbox="true"
-      :expand-on-click-node="false"
-      :filter-node-method="filterNode"
-      :render-content="renderContent"
-      ref="tree"
-    ></el-tree>
+
+  
+    <div class="tree-wrapper">
+      <el-tree :props="props" :load="loadNode" lazy show-checkbox></el-tree>
+    </div>
+
     <el-dialog :title="getTitle" :visible.sync="visible">
       <el-form :model="form" :rules="rules" label-width="80px" ref="sortForm">
         <el-form-item label="父级分类">
@@ -57,7 +51,7 @@
 </template>
 <script type="text/javascript">
 import headTop from "@/components/headTop";
-import { addCategoryM, listCategoryM, delCategoryM } from "@/api/getData";
+import { addCategoryM, listCategoryM, delCategoryM ,getCategoryAndDeepChildCategory} from "@/api/getData";
 
 // 0 水质监测 1 新闻 2 文章 3 教程
 const sort_type = {
@@ -70,6 +64,11 @@ export default {
   name: "sort",
   data() {
     return {
+      props: {
+        label: "name",
+        children: "zones",
+        isLeaf: "leaf"
+      },
       page_grade: "deleteArticle",
       grade: {
         updateSort: !0,
@@ -109,8 +108,7 @@ export default {
         children: "children",
         label: "sort_name",
         value: "id"
-      },
-      vv: "xxx"
+      }
     };
   },
   computed: {
@@ -130,6 +128,17 @@ export default {
     }
   },
   methods: {
+    async loadNode(node, resolve) {
+      const res = await listCategoryM();
+      if (node.level === 0) {
+        return resolve(res.data);
+      }
+      if (node.level > 1) return resolve([]);
+      const currentCategory = node.data;
+      const subCategory = await getCategoryAndDeepChildCategory(currentCategory._id);
+
+      resolve(subCategory.data);
+    },
     async list() {
       const res = await listCategoryM();
       let arr = res.data;
@@ -138,12 +147,6 @@ export default {
         arr.forEach(item => {
           item.sort_name = item.name;
           item.parent_id = item.parentId;
-          // item.disabled = false;
-          // console.log(' item ', item);
-          // if (item.parent_id === obj._id) {
-          //   item.children = item.children || [];
-          //   item.children.push(obj);
-          // }
         });
       }
       // console.log("arr ### ", arr);
@@ -215,7 +218,6 @@ export default {
         type: "success"
       });
       this.list();
-      
     },
     async headleClick(icon, data, store) {
       if (icon === "delete") {
@@ -226,12 +228,6 @@ export default {
         })
           .then(() => {
             this.del(data._id);
-
-            // utils.ajax.call(this, '/deleteSort', { id: data.id }, (d, err) => {
-            //   if (!err) {
-            //     store.remove(data)
-            //   }
-            // })
           })
           .catch(() => {});
       } else if (icon === "plus" || icon === "edit") {
@@ -252,66 +248,6 @@ export default {
         this.visible = true;
         console.log("parent_data ### ", data);
       }
-    },
-    renderContent(h, { node, data, store }) {
-      let but = (type, icon) => {
-        let dis =
-          icon === "delete"
-            ? data.disabled || this.grade.deleteSort
-            : this.grade.updateSort;
-        return h("el-button", {
-          props: {
-            size: "mini",
-            type,
-            icon: "el-icon-" + icon,
-            disabled: false
-          },
-          on: {
-            click: () => {
-              let p = node.parent;
-              this.parent_id = [];
-              while (p.parent) {
-                this.parent_id.unshift(p.data.id);
-                p = p.parent;
-              }
-              this.headleClick(icon, data, store);
-              console.log("data  p ### ", p);
-            }
-          }
-        });
-      };
-      return h("span", { style: { width: "100%" } }, [
-        h("span", [
-          h("span"),
-          [
-            node.label,
-            h(
-              "span",
-              {
-                style: {
-                  color: "#999",
-                  marginLeft: "10px"
-                }
-              }
-              // common.sort_type[node.data.sort_type]
-            )
-          ]
-        ]),
-        h(
-          "span",
-          {
-            style: {
-              float: "right",
-              margin: "-2px 10px"
-            }
-          },
-          [
-            but("success", "plus"),
-            but("warning", "edit"),
-            but("danger", "delete")
-          ]
-        )
-      ]);
     }
   }
   // mixins: [common.mixin]
@@ -320,6 +256,10 @@ export default {
 <style lang="less">
 .search_container {
   padding: 20px 20px 0 20px;
+}
+
+.tree-wrapper{
+  padding-top: 20px;
 }
 .filter-tree {
   margin-top: 10px;

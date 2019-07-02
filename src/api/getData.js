@@ -269,5 +269,6 @@ export const delArticle = article_id=> fetch('/article/delete/'+article_id,'','D
 
 
 export const addCategoryM = data=> fetch('/category_m/add',data,'POST');
-export const listCategoryM = data=> fetch('/category_m/list');
+export const listCategoryM = ()=> fetch('/category_m/list');
+export const getCategoryAndDeepChildCategory = categoryId=> fetch('/category_m/getCategoryAndDeepChildCategory/'+categoryId);
 export const delCategoryM = id=> fetch('/category_m/del/'+id,'','DELETE');
