@@ -54,7 +54,7 @@ var context = config.dev.context
 
 switch(process.env.NODE_ENV){
     case 'local': var proxypath = 'http://0.0.0.0:7001'; break;
-    case 'online': var proxypath = 'http://0.0.0.0:8004'; break;
+    case 'online': var proxypath = 'http://47.94.169.143:8004'; break;
 }
 var options = {
     target: proxypath,
