@@ -41,6 +41,10 @@ const routes = [
 		component: login
 	},
 	{
+		path:'/articleDetail',
+		component:articleDetail,
+	},
+	{
 		path: '/manage',
 		component: manage,
 		name: '',
@@ -130,10 +134,6 @@ const routes = [
 			path:'/articleAdd',
 			component:articleAdd,
 			meta: ['文章管理', '添加文章'],
-		},{
-			path:'/articleDetail',
-			component:articleDetail,
-			meta: ['文章管理', '文章详情'],
 		},{
 			path:'/articleSort',
 			component:articleSort,

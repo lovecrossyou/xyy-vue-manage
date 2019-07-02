@@ -1,6 +1,5 @@
 <template>
   <div>
-    <head-top></head-top>
     <div class="main">
       <div class="title">{{articleInfo.title}}</div>
       <div class="time">{{articleInfo.create_time}}</div>
@@ -24,8 +23,8 @@ export default {
     ...mapActions("article", ["getDetail"])
   },
   mounted() {
-    //   console.log('articleInfo ', this.articleInfo);
-    // this.getDetail();
+      console.log('articleInfo ', this.$route.query);
+    this.getDetail(this.$route.query.article_id);
   }
 };
 </script>
