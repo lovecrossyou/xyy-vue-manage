@@ -32,7 +32,7 @@ export default {
 <style >
 .main {
   padding: 20px 40px;
-  width:80%;
+  width:100%;
 }
 .title {
   font-size: 30px;
@@ -44,4 +44,8 @@ export default {
   color: #999;
   line-height: 40px;
 }
+
+/* p>img{
+  width: 100%;
+} */
 </style>
