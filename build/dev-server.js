@@ -60,9 +60,7 @@ var options = {
     target: proxypath,
     changeOrigin: true,
 }
-if (context.length) {
-    app.use(proxyMiddleware(context, options))
-}
+
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 

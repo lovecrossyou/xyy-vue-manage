@@ -7,7 +7,7 @@ module.exports = {
     index: path.resolve(__dirname, '../manage/index.html'),
     assetsRoot: path.resolve(__dirname, '../manage'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/record/',
+    assetsPublicPath: '/jindi/',
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -29,25 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {},
     context: [ //代理路径
-        '/shopping',
-        '/factory',
-        '/banner',
-        '/ugc',
-        '/v1',
-        '/v2',
-        '/v3',
-        '/v4',
-        '/bos',
-        '/member',
-        '/promotion',
-        '/eus',
-        '/payapi',
-        '/admin',
-        '/statis',
-        '/img',
-        '/brand',
-        '/article',
-        '/category_m'
+        
     ],
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
