@@ -13,9 +13,16 @@
       </el-row>
     </div>
 
-  
     <div class="tree-wrapper">
-      <el-tree :props="props" :load="loadNode" lazy show-checkbox></el-tree>
+      <el-tree :props="props" :load="loadNode" lazy accordion show-checkbox>
+        <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span>{{ node.label }}</span>
+          <span>
+            <el-button type="text" size="mini" @click="() => append(data)">添加</el-button>
+            <el-button type="text" size="mini" @click="() => remove(node, data)">删除</el-button>
+          </span>
+        </span>
+      </el-tree>
     </div>
 
     <el-dialog :title="getTitle" :visible.sync="visible">
@@ -51,7 +58,12 @@
 </template>
 <script type="text/javascript">
 import headTop from "@/components/headTop";
-import { addCategoryM, listCategoryM, delCategoryM ,getCategoryAndDeepChildCategory} from "@/api/getData";
+import {
+  addCategoryM,
+  listCategoryM,
+  delCategoryM,
+  getCategoryAndDeepChildCategory
+} from "@/api/getData";
 
 // 0 水质监测 1 新闻 2 文章 3 教程
 const sort_type = {
@@ -128,6 +140,20 @@ export default {
     }
   },
   methods: {
+    append(data) {
+      const newChild = { id: id++, label: "testtest", children: [] };
+      if (!data.children) {
+        this.$set(data, "children", []);
+      }
+      data.children.push(newChild);
+    },
+
+    remove(node, data) {
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+    },
     async loadNode(node, resolve) {
       const res = await listCategoryM();
       if (node.level === 0) {
@@ -135,7 +161,9 @@ export default {
       }
       if (node.level > 1) return resolve([]);
       const currentCategory = node.data;
-      const subCategory = await getCategoryAndDeepChildCategory(currentCategory._id);
+      const subCategory = await getCategoryAndDeepChildCategory(
+        currentCategory._id
+      );
 
       resolve(subCategory.data);
     },
@@ -258,7 +286,7 @@ export default {
   padding: 20px 20px 0 20px;
 }
 
-.tree-wrapper{
+.tree-wrapper {
   padding-top: 20px;
 }
 .filter-tree {
