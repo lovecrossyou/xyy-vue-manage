@@ -178,22 +178,12 @@ export default {
       if (node.level === 0) {
         return resolve(res.data);
       }
-      // if (node.level > 1) return resolve([]);
       const currentCategory = node.data;
       const subCategory = await listCategoryM(currentCategory._id);
       resolve(subCategory.data);
     },
     async list() {
       const res = await listCategoryM(0);
-      let arr = res.data;
-      for (let i = arr.length; i--; ) {
-        let obj = arr[i];
-        arr.forEach(item => {
-          item.sort_name = item.name;
-          item.parent_id = item.parentId;
-        });
-      }
-      // console.log("arr ### ", arr);
       this.data = arr;
     },
     async batchDelete() {
