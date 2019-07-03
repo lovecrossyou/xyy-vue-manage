@@ -8,18 +8,25 @@
         </el-col>
         <el-col :span="16" class="button-tree">
           <el-button type="success" @click="addSort">新增分类</el-button>
-          <el-button type="danger" @click="batchDelete">批量删除</el-button>
         </el-col>
       </el-row>
     </div>
 
     <div class="tree-wrapper">
-      <el-tree :props="props" :load="loadNode" lazy accordion show-checkbox>
+      <el-tree
+        ref="tree"
+        :props="props"
+        :load="loadNode"
+        lazy
+        node-key="_id"
+        show-checkbox
+        :expand-on-click-node="false"
+      >
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
           <span>
-            <el-button type="text" size="mini" @click="() => append(data)">添加</el-button>
-            <el-button type="text" size="mini" @click="() => remove(node, data)">删除</el-button>
+            <el-button type="text" size="mini" @click="() => showAddCategoryModal(node,data)">添加子项</el-button>
+            <el-button type="text" size="mini" @click="() => showDelCategoryModal(node, data)">删除</el-button>
           </span>
         </span>
       </el-tree>
@@ -28,25 +35,10 @@
     <el-dialog :title="getTitle" :visible.sync="visible">
       <el-form :model="form" :rules="rules" label-width="80px" ref="sortForm">
         <el-form-item label="父级分类">
-          <el-cascader
-            :options="data"
-            v-model="parent_id"
-            placeholder="留空为根分类"
-            disabled
-            :props="defaultProps"
-          ></el-cascader>
+          <el-cascader :options="rootCategories" placeholder="留空为根分类" v-model="rootValue"></el-cascader>
         </el-form-item>
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="分类类别" prop="sort_type">
-          <el-select
-            v-model="form.type"
-            :disabled="parent_id.length > 0||form.id !== 0"
-            style="width: 100%"
-          >
-            <el-option v-for="(item,key) in sort_type" :key="key" :label="item" :value="key"></el-option>
-          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -67,15 +59,16 @@ import {
 
 // 0 水质监测 1 新闻 2 文章 3 教程
 const sort_type = {
-  "0": "水质监测",
   "1": "新闻",
-  "2": "文章",
-  "3": "教程"
+  "2": "文章"
 };
 export default {
   name: "sort",
   data() {
     return {
+      rootCategories: [],
+      rootValue: "",
+      currentNode: null,
       props: {
         label: "name",
         children: "zones",
@@ -140,14 +133,40 @@ export default {
     }
   },
   methods: {
-    append(data) {
-      const newChild = { id: id++, label: "testtest", children: [] };
-      if (!data.children) {
-        this.$set(data, "children", []);
-      }
-      data.children.push(newChild);
+    showDelCategoryModal(node, data) {
+      let that = this;
+      this.$confirm("确定要删除 " + data.name + " 分类", "系统提醒", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          const res = await delCategoryM(data._id);
+          this.$message({
+            message: res.message,
+            type: "success"
+          });
+          that.list();
+          that.$refs.tree.remove(node);
+        })
+        .catch(() => {});
     },
+    delCategory(data) {
+      this.parent_data = data;
+    },
+    showAddCategoryModal(node, data) {
+      this.visible = true;
+      this.currentNode = node;
+      this.parent_data = data;
 
+      this.rootCategories = [
+        {
+          value: data._id,
+          label: data.name
+        }
+      ];
+      this.rootValue = [data._id];
+    },
     remove(node, data) {
       const parent = node.parent;
       const children = parent.data.children || parent.data;
@@ -155,20 +174,17 @@ export default {
       children.splice(index, 1);
     },
     async loadNode(node, resolve) {
-      const res = await listCategoryM();
+      const res = await listCategoryM(0);
       if (node.level === 0) {
         return resolve(res.data);
       }
-      if (node.level > 1) return resolve([]);
+      // if (node.level > 1) return resolve([]);
       const currentCategory = node.data;
-      const subCategory = await getCategoryAndDeepChildCategory(
-        currentCategory._id
-      );
-
+      const subCategory = await listCategoryM(currentCategory._id);
       resolve(subCategory.data);
     },
     async list() {
-      const res = await listCategoryM();
+      const res = await listCategoryM(0);
       let arr = res.data;
       for (let i = arr.length; i--; ) {
         let obj = arr[i];
@@ -188,18 +204,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         })
-          .then(() => {
-            // utils.ajax.call(this, '/batchDelSort', { ids: v.join(',') }, (d, err) => {
-            //   if (!err) {
-            //     let a = (obj) => {
-            //       obj && obj.forEach((o, i) => {
-            //         v.includes(o.id) ? obj.splice(i, 1) : a(o.children)
-            //       })
-            //     }
-            //     a(this.data)
-            //   }
-            // })
-          })
+          .then(() => {})
           .catch(() => {});
       } else {
         this.$message("请先选择数据！");
@@ -213,6 +218,11 @@ export default {
           let parent_id = this.parent_data ? this.parent_data._id : 0;
           this.form.parentId = parent_id;
           const res = await addCategoryM(this.form);
+
+          const data = res.data;
+          if (this.currentNode) {
+            this.$refs.tree.append(data, this.currentNode);
+          }
           this.$message({
             message: res.message,
             type: "success"
@@ -229,7 +239,7 @@ export default {
           this.form[key] = key === "id" ? 0 : "";
         }
       }
-      this.parent_id = [];
+      this.rootValue = [];
       this.visible = true;
       this.type = "add";
       this.parent_store = null;
@@ -288,6 +298,15 @@ export default {
 
 .tree-wrapper {
   padding-top: 20px;
+}
+
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
 }
 .filter-tree {
   margin-top: 10px;
