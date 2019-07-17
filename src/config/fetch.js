@@ -22,7 +22,8 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 			method: type,
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin':'*'
 			},
 			mode: "cors",
 			cache: "force-cache"
