@@ -16,10 +16,10 @@
 
           <el-submenu index="10">
             <template slot="title">
-              <i class="el-icon-document"></i>水站管理
+              <i class="el-icon-document"></i>店铺管理
             </template>
-            <el-menu-item index="shopList">水站列表</el-menu-item>
-            <el-menu-item index="addShop">添加水站</el-menu-item>
+            <el-menu-item index="shopList">店铺列表</el-menu-item>
+            <el-menu-item index="addShop">添加店铺</el-menu-item>
           </el-submenu>
 
           <el-submenu index="11">
