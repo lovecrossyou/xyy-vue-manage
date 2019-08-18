@@ -149,6 +149,11 @@ export const getResturantsCount = () => fetch('/shopping/restaurants/count');
 
 export const updateResturant = data => fetch('/shopping/updateshop', data, 'POST');
 
+// 审核通过
+export const approveRestaurant = restaurant_id => fetch('/shopping/restaurant/approve/'+restaurant_id);
+// 驳回
+export const rejectRestaurant = restaurant_id => fetch('/shopping/restaurant/reject/'+restaurant_id);
+
 /**
  * 删除餐馆
  */

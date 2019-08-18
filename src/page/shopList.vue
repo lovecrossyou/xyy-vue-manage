@@ -149,8 +149,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="updateShop">通 过</el-button>
-          <el-button type="danger" @click="updateShop">驳 回</el-button>
+          <el-button type="primary" @click="approveRestaurant">通 过</el-button>
+          <el-button type="danger" @click="rejectRestaurant">驳 回</el-button>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
         </div>
       </el-dialog>
@@ -168,7 +168,9 @@ import {
   foodCategory,
   updateResturant,
   searchplace,
-  deleteResturant
+  deleteResturant,
+  approveRestaurant,
+  rejectRestaurant
 } from "@/api/getData";
 import { mapState, mapActions } from "vuex";
 
@@ -219,6 +221,18 @@ export default {
         keyword: this.formInline.name
       };
       this.getResturants(params);
+    },
+    async approveRestaurant(){
+      const id= this.selectTable.id;
+      const res = await approveRestaurant(id);
+      this.dialogFormVisible = false;
+      this.getResturants();
+    },
+    async rejectRestaurant(){
+      const id= this.selectTable.id;
+      const res = await rejectRestaurant(id);
+      this.dialogFormVisible = false;
+      this.getResturants();
     },
     async initData() {
       try {
